@@ -1,4 +1,13 @@
+<?php
+require 'C:\xampp\htdocs\Sudoku\table.php';
 
+$table = new table();
+$cells = $table::generate();
+
+echo '<pre>';
+var_dump($cells);
+echo '</pre>';
+?>
 
 <!DOCTYPE html>
 <!--
