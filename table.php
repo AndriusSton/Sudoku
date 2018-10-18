@@ -14,15 +14,66 @@
 class table {
 
     private $cells = array();
+    private $table = array(
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0
+    );
+
+    public function row($cell) {
+        return $cell / 9;
+    }
+
+    public function col($cell) {
+        return $cell % 9;
+    }
+
+    public function block($cell) {
+        return floor(row($cell) / 3) * 3 + floor(col($cell) / 3);
+    }
+
+    public function is_ok_in_row($number, $cell, $table) {
+        $ok = true;
+        $row = row($cell);
+        for ($i = 0; $i < 9; $i++) {
+            if ($table[$row * 9 + $i] === $number) {
+                $ok = false;
+                break;
+            }
+        }
+        return $ok;
+    }
+
+    public function is_ok_in_col($number, $cell, $table) {
+        $ok = true;
+        $col = col($cell);
+        for ($i = 0; $i < 9; $i++) {
+            if ($table[$col * 9 + $i] === $number) {
+                $ok = false;
+                break;
+            }
+        }
+        return $ok;
+    }
+
+    public function is_ok_in_block($number, $cell, $table) {
+        $ok = true;
+        $block = block($cell);
+    }
 
     public static function generate() {
 
         // Number of cells in one line
-        $cell_count = 8;
+        $cell_count = 9;
 
         // A table size is cell_count*cell_count
         $table = array();
-
 
         for ($i = 0; $i < $cell_count; $i++) {
 
