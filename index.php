@@ -17,14 +17,25 @@ for ($j = 0; $j < 81; $j++) {
     if (empty($possible_cell_values)) {
         do {
             $j--;
+
             echo '<br/> ! BACK TO ' . $j . '<br/>';
             $possible_cell_values = $table->getPossibleValues($j, $cells);
 
             if (array_key_exists($j, $wrong_choices)) {
-                echo 'Array already exists<br/>';
+                //echo 'Array already exists<br/>';
                 array_push($wrong_choices[$j], $cells[$j]);
             } else {
                 $wrong_choices[$j] = array($cells[$j]);
+            }
+
+            if ($j < max(array_keys($wrong_choices))) {
+                foreach (array_keys($wrong_choices) as $key) {
+                    //print_r(array_keys($wrong_choices));
+                    //echo '<br/>' . min(array_keys($wrong_choices)) . '<br/>' . 'Key is: ' . $key . '<br/>';
+                    if ($key > $j) {
+                        unset($wrong_choices[$key]);
+                    }
+                }
             }
 
             print_r($wrong_choices);
@@ -74,16 +85,16 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-        <?php
-        echo '<table>';
-        for ($i = 0; $i < 9; $i++) {
-            echo '<tr id="' . $i . '">';
-            for ($j = 0; $j < 9; $j++) {
-                echo '<td id="' . $j . '">' . $i . ' ' . $j . '</td>';
-            }
-            echo '</tr>';
-        }
-        echo '</table>';
-        ?>
+<?php
+echo '<table>';
+for ($i = 0; $i < 9; $i++) {
+    echo '<tr id="' . $i . '">';
+    for ($j = 0; $j < 9; $j++) {
+        echo '<td id="' . $j . '">' . $i . ' ' . $j . '</td>';
+    }
+    echo '</tr>';
+}
+echo '</table>';
+?>
     </body>
 </html>
