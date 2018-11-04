@@ -7,64 +7,44 @@ $cells = $table->getTable();
 $possible_cell_values = $table->getPossible();
 $wrong_choices = array();
 
-$counter = 0;
 for ($j = 0; $j < 81; $j++) {
     $possible_cell_values = $table->getPossibleValues($j, $cells);
-    echo 'Cell ' . $j . '<br/>';
-    echo ' Size of choices: ' . sizeof($possible_cell_values) . '<br/>';
-    print_r($possible_cell_values);
+    //echo 'Cell ' . $j . '<br/>';
+    //echo ' Size of choices: ' . sizeof($possible_cell_values) . '<br/>';
+    //print_r($possible_cell_values);
 
     if (empty($possible_cell_values)) {
         do {
             $j--;
-
-            echo '<br/> ! BACK TO ' . $j . '<br/>';
+            //echo '<br/> ! BACK TO ' . $j . '<br/>';
             $possible_cell_values = $table->getPossibleValues($j, $cells);
 
             if (array_key_exists($j, $wrong_choices)) {
-                //echo 'Array already exists<br/>';
                 array_push($wrong_choices[$j], $cells[$j]);
             } else {
                 $wrong_choices[$j] = array($cells[$j]);
             }
 
+            $cells[$j] = 0;
+            
             if ($j < max(array_keys($wrong_choices))) {
                 foreach (array_keys($wrong_choices) as $key) {
-                    //print_r(array_keys($wrong_choices));
-                    //echo '<br/>' . min(array_keys($wrong_choices)) . '<br/>' . 'Key is: ' . $key . '<br/>';
                     if ($key > $j) {
                         unset($wrong_choices[$key]);
                     }
                 }
             }
 
-            print_r($wrong_choices);
+            //print_r($wrong_choices);
             foreach ($wrong_choices[$j] as $choice) {
-                echo '<br/>';
-                print_r($choice);
                 $possible_cell_values = $table->removeFromPossible($possible_cell_values, $choice);
             }
         } while (sizeof($possible_cell_values) < 1);
 
-
-        echo '<br/>Possible: ';
-        print_r($possible_cell_values);
-
-        $counter++;
-        if ($counter == 100) {
-            break;
-        }
     }
 
     $cells[$j] = $table->getRandomNumber($possible_cell_values);
 
-    echo ' Number: ' . $cells[$j] . '<br/>--------------------------------------------<br/><br/>';
-    if ($counter == 100) {
-        break;
-    }
-
-//echo 'Random number: ' . $number . '<br/>';
-//echo '--------------------------------------<br/>';
 }
 echo '<pre>';
 print_r($cells);
