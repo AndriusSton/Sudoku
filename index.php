@@ -2,53 +2,11 @@
 require 'C:\xampp\htdocs\Sudoku\table.php';
 
 $table = new table();
-$cells = $table->getTable();
 
-$possible_cell_values = $table->getPossible();
-$wrong_choices = array();
-
-for ($j = 0; $j < 81; $j++) {
-    $possible_cell_values = $table->getPossibleValues($j, $cells);
-    //echo 'Cell ' . $j . '<br/>';
-    //echo ' Size of choices: ' . sizeof($possible_cell_values) . '<br/>';
-    //print_r($possible_cell_values);
-
-    if (empty($possible_cell_values)) {
-        do {
-            $j--;
-            //echo '<br/> ! BACK TO ' . $j . '<br/>';
-            $possible_cell_values = $table->getPossibleValues($j, $cells);
-
-            if (array_key_exists($j, $wrong_choices)) {
-                array_push($wrong_choices[$j], $cells[$j]);
-            } else {
-                $wrong_choices[$j] = array($cells[$j]);
-            }
-
-            $cells[$j] = 0;
-            
-            if ($j < max(array_keys($wrong_choices))) {
-                foreach (array_keys($wrong_choices) as $key) {
-                    if ($key > $j) {
-                        unset($wrong_choices[$key]);
-                    }
-                }
-            }
-
-            //print_r($wrong_choices);
-            foreach ($wrong_choices[$j] as $choice) {
-                $possible_cell_values = $table->removeFromPossible($possible_cell_values, $choice);
-            }
-        } while (sizeof($possible_cell_values) < 1);
-
-    }
-
-    $cells[$j] = $table->getRandomNumber($possible_cell_values);
-
-}
 echo '<pre>';
-print_r($cells);
+print_r($table->getGrid());
 echo '</pre>';
+
 ?>
 
 <!DOCTYPE html>
