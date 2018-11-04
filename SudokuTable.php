@@ -11,9 +11,9 @@
  *
  * @author Andrius
  */
-class table {
+class SudokuTable {
 
-    private $tableInitial = array(
+    const INITIAL_TABLE = array(
         0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -24,8 +24,10 @@ class table {
         0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0
     );
-    private $possibleInitial = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    const INITIAL_POSSIBLE_VALUES = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    
     private $grid = array();
+    
 
     /*
      * Grid generation is performed during object initialization
@@ -41,22 +43,6 @@ class table {
      */
     public function getGrid() {
         return $this->grid;
-    }
-
-    /*
-     * Returns the initial possible values array()
-     * 
-     */
-    private function getPossibleInitial() {
-        return $this->possibleInitial;
-    }
-
-    /*
-     * Returns the initial table array()
-     * 
-     */
-    private function getTableInitial() {
-        return $this->tableInitial;
     }
 
     /*
@@ -113,7 +99,7 @@ class table {
      * 
      */
     private function getPossibleValues($cell, $table) {
-        $possible_cell_values = $this->getPossibleInitial();
+        $possible_cell_values = self::INITIAL_POSSIBLE_VALUES;
         
         // IF an empty table is passed, initial possible cell value array
         // is returned
@@ -162,8 +148,7 @@ class table {
      * 
      */
     private function generate() {
-        $cells = $this->getTableInitial();
-        $possible_cell_values = $this->getPossibleInitial();
+        $cells = self::INITIAL_TABLE;
         $wrong_choices = array();
 
         // Iterate through all the 9x9 cell grid and randomly select the number
@@ -224,5 +209,4 @@ class table {
         }
         return $cells;
     }
-
 }

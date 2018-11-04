@@ -1,12 +1,18 @@
 <?php
-require 'C:\xampp\htdocs\Sudoku\table.php';
+require 'C:\xampp\htdocs\Sudoku\SudokuTable.php';
+require 'C:\xampp\htdocs\Sudoku\Puzzle.php';
 
-$table = new table();
+$table = new SudokuTable();
+$puzzle = new Puzzle($table, 0);
 
 echo '<pre>';
 print_r($table->getGrid());
 echo '</pre>';
 
+
+echo '<pre>';
+print_r($puzzle->getPuzzle());
+echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -23,16 +29,16 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-<?php
-echo '<table>';
-for ($i = 0; $i < 9; $i++) {
-    echo '<tr id="' . $i . '">';
-    for ($j = 0; $j < 9; $j++) {
-        echo '<td id="' . $j . '">' . $i . ' ' . $j . '</td>';
-    }
-    echo '</tr>';
-}
-echo '</table>';
-?>
+        <?php
+        echo '<table>';
+        for ($i = 0; $i < 9; $i++) {
+            echo '<tr id="' . $i . '">';
+            for ($j = 0; $j < 9; $j++) {
+                echo '<td id="' . $j . '">' . $i . ' ' . $j . '</td>';
+            }
+            echo '</tr>';
+        }
+        echo '</table>';
+        ?>
     </body>
 </html>
