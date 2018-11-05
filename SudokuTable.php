@@ -26,23 +26,12 @@ class SudokuTable {
     );
     const INITIAL_POSSIBLE_VALUES = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
     
-    private $grid = array();
-    
-
-    /*
-     * Grid generation is performed during object initialization
-     * 
-     */
-    public function __construct() {
-        $this->grid = $this->generate();
-    }
-
     /*
      * Returns the grid
      * 
      */
     public function getGrid() {
-        return $this->grid;
+        return $this->generate();
     }
 
     /*

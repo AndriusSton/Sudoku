@@ -2,17 +2,9 @@
 require 'C:\xampp\htdocs\Sudoku\SudokuTable.php';
 require 'C:\xampp\htdocs\Sudoku\Puzzle.php';
 
-$table = new SudokuTable();
-$puzzle = new Puzzle($table, 0);
+$puzzle = new Puzzle(new SudokuTable(), 0);
+$puzzleArray =  $puzzle->getPuzzle();
 
-echo '<pre>';
-print_r($table->getGrid());
-echo '</pre>';
-
-
-echo '<pre>';
-print_r($puzzle->getPuzzle());
-echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +26,7 @@ and open the template in the editor.
         for ($i = 0; $i < 9; $i++) {
             echo '<tr id="' . $i . '">';
             for ($j = 0; $j < 9; $j++) {
-                echo '<td id="' . $j . '">' . $i . ' ' . $j . '</td>';
+                echo '<td id="' . (($i * 9) + $j) . '">' . (($puzzleArray[($i * 9) + $j] != 0)? $puzzleArray[($i * 9) + $j] : ' ') . '</td>';
             }
             echo '</tr>';
         }

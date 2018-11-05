@@ -36,7 +36,7 @@ class Puzzle {
         return $puzzle;
     }
 
-    public function getRemovedCells() {
+    private function getRemovedCells() {
         $removedCells = array();
         for ($i = 0; $i < 40; $i++) {
             $indexToRemove = rand(0, 80);
