@@ -8,10 +8,36 @@ and open the template in the editor.
     Author     : Andrius
 */
 
+
+
 td {
     height: 30px;
     width: 30px;
     text-align: center;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
+}
+
+[id='3'], [id='6'], [id='9'], [id='12'], [id='15'], [id='18'], [id='21'], 
+[id='24'], [id='27'], [id='30'], [id='33'], [id='36'], [id='39'], [id='42'],
+[id='45'], [id='48'], [id='51'], [id='54'], [id='57'], [id='60'], [id='63'],
+[id='66'], [id='69'], [id='72'], [id='75'], [id='78'] {
+    border-left: 4px solid black;
+}
+
+[id='8'], [id='17'], [id='26'], [id='35'], [id='44'], [id='53'], [id='62'], 
+[id='71'], [id='80']  {
+    border-right: 4px solid black;
+}
+
+[id='0'] {
+    border-left: 4px solid black;
+    border-top: 4px solid black;
+}
+
+[id='18'], [id='19'], [id='20'], [id='21'], [id='22'], [id='23'], [id='24'], 
+[id='25'], [id='26'], [id='45'], [id='46'], [id='47'], [id='48'], [id='49'], 
+[id='50'], [id='51'], [id='52'], [id='53'], [id='72'], [id='73'], [id='74'], 
+[id='75'], [id='76'], [id='76'], [id='77'], [id='78'], [id='79'], [id='80'] {
+    border-bottom: 4px solid black;
 }
