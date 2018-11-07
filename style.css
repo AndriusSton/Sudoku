@@ -8,8 +8,7 @@ and open the template in the editor.
     Author     : Andrius
 */
 
-
-
+/* ------------- Grid Styling -------------- */
 td {
     height: 30px;
     width: 30px;
@@ -17,7 +16,23 @@ td {
     border-style: solid;
     border-width: 1px;
 }
+/* ------------ Grid Styling End------------ */
 
+
+/* ------------ Input Styling------------ */
+input {
+    display: block;
+    padding-left: 10px;
+    margin: 0;
+    border: 0;
+    width: 70%;
+    color: darkmagenta;
+    font-style: italic;
+}
+/* ------------ Input Styling End------------ */
+
+
+/* ------------- Block Styling ------------ */
 [id='3'], [id='6'], [id='9'], [id='12'], [id='15'], [id='18'], [id='21'], 
 [id='24'], [id='27'], [id='30'], [id='33'], [id='36'], [id='39'], [id='42'],
 [id='45'], [id='48'], [id='51'], [id='54'], [id='57'], [id='60'], [id='63'],
@@ -41,3 +56,4 @@ td {
 [id='75'], [id='76'], [id='76'], [id='77'], [id='78'], [id='79'], [id='80'] {
     border-bottom: 4px solid black;
 }
+/* ----------- Block Styling End ---------- */

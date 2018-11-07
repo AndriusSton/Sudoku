@@ -1,6 +1,6 @@
 <?php
-require 'C:\xampp\htdocs\Sudoku\SudokuTable.php';
-require 'C:\xampp\htdocs\Sudoku\Puzzle.php';
+require 'C:\xampp\htdocs\Sudoku\classes\SudokuTable.php';
+require 'C:\xampp\htdocs\Sudoku\classes\Puzzle.php';
 
 $puzzle = new Puzzle(new SudokuTable(), 0);
 $puzzleArray =  $puzzle->getPuzzle();
@@ -26,7 +26,9 @@ and open the template in the editor.
         for ($i = 0; $i < 9; $i++) {
             echo '<tr id="' . $i . '">';
             for ($j = 0; $j < 9; $j++) {
-                echo '<td id="' . (($i * 9) + $j) . '">' . (($puzzleArray[($i * 9) + $j] != 0)? $puzzleArray[($i * 9) + $j] : ' ') . '</td>';
+                echo '<td id="' . (($i * 9) + $j) . '">' . 
+                        (($puzzleArray[($i * 9) + $j] != 0)? $puzzleArray[($i * 9) + $j] : '<input type="text" autocomplete="off"/>') .
+                        '</td>';
             }
             echo '</tr>';
         }
