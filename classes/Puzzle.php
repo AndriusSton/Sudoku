@@ -6,9 +6,6 @@
  * and open the template in the editor.
  */
 
-require_once 'SudokuTable.php';
-;
-
 /**
  * Description of TableView
  *
@@ -17,23 +14,21 @@ require_once 'SudokuTable.php';
 class Puzzle {
 
     private $grid = array();
-    private $puzzleLevel = 0;
     private $puzzle = array();
 
-    public function __construct(SudokuTable $table, $puzzleLevel) {
-        $this->grid = $table->getGrid();
-        $this->puzzleLevel = $puzzleLevel;
+    public function __construct(Algorithm $algorithm) {
+        $this->grid = $algorithm->getGrid();
     }
 
     public function getPuzzle() {
-        $puzzle = $this->grid;
+        $this->puzzle = $this->grid;
         $removedCells = $this->getRemovedCells();
         for ($i = 0; $i < sizeof($this->grid); $i++) {
             if (in_array($i, $removedCells)) {
-                $puzzle[$i] = 0;
+                $this->puzzle[$i] = 0;
             }
         }
-        return $puzzle;
+        return $this->puzzle;
     }
 
     private function getRemovedCells() {
@@ -49,4 +44,5 @@ class Puzzle {
         return $removedCells;
     }
 
+    
 }

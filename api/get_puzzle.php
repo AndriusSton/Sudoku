@@ -11,10 +11,10 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once '../classes/Puzzle.php';
-include_once '../classes/SudokuTable.php';
+include_once '../classes/Algorithm.php';
 
 // Instatiate puzzle object
-$puzzle = new Puzzle(new SudokuTable(), 0);
+$puzzle = new Puzzle(new Algorithm(), 0);
 
 // Getting puzzle array
 $puzzleArray = $puzzle->getPuzzle();

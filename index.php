@@ -1,8 +1,8 @@
 <?php
-require 'C:\xampp\htdocs\Sudoku\classes\SudokuTable.php';
+require 'C:\xampp\htdocs\Sudoku\classes\Algorithm.php';
 require 'C:\xampp\htdocs\Sudoku\classes\Puzzle.php';
 
-$puzzle = new Puzzle(new SudokuTable(), 0);
+$puzzle = new Puzzle(new Algorithm(), 0);
 $puzzleArray =  $puzzle->getPuzzle();
 
 ?>
