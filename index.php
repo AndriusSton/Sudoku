@@ -3,8 +3,7 @@ require 'C:\xampp\htdocs\Sudoku\classes\Algorithm.php';
 require 'C:\xampp\htdocs\Sudoku\classes\Puzzle.php';
 
 $puzzle = new Puzzle(new Algorithm(), 0);
-$puzzleArray =  $puzzle->getPuzzle();
-
+$puzzleArray = $puzzle->getPuzzle();
 ?>
 
 <!DOCTYPE html>
@@ -21,18 +20,15 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-        <?php
-        echo '<table>';
-        for ($i = 0; $i < 9; $i++) {
-            echo '<tr id="' . $i . '">';
-            for ($j = 0; $j < 9; $j++) {
-                echo '<td id="' . (($i * 9) + $j) . '">' . 
-                        (($puzzleArray[($i * 9) + $j] != 0)? $puzzleArray[($i * 9) + $j] : '<input type="text" autocomplete="off"/>') .
-                        '</td>';
-            }
-            echo '</tr>';
-        }
-        echo '</table>';
-        ?>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-lg-3'>
+                    <button type="button" class='btn btn-primary' id='btn'>Give me a Sudoku</button>
+                </div>
+                <div id='grid' class='col-lg-6'></div>
+                <div id='spacer' class='col-lg-3'></div>
+            </div>
+        </div>
+        <script src="js/main.js"></script> 
     </body>
 </html>
