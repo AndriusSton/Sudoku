@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of TableView
+ * Description of Puzzle
  *
  * @author Andrius
  */
@@ -43,6 +43,5 @@ class Puzzle {
         asort($removedCells);
         return $removedCells;
     }
-
     
 }

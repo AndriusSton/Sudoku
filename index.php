@@ -1,9 +1,23 @@
 <?php
 require 'C:\xampp\htdocs\Sudoku\classes\Algorithm.php';
 require 'C:\xampp\htdocs\Sudoku\classes\Puzzle.php';
+require 'C:\xampp\htdocs\Sudoku\classes\Solver.php';
 
 $puzzle = new Puzzle(new Algorithm(), 0);
 $puzzleArray = $puzzle->getPuzzle();
+
+$sudokuSolver = new Solver();
+
+echo 'Puzzle: <br/><pre>';
+print_r($puzzleArray);
+echo '</pre>';
+$solution = $sudokuSolver->getSolution($puzzleArray);
+
+echo 'Solution: <br/><pre>';
+print_r($solution);
+echo '</pre>';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -23,12 +37,15 @@ and open the template in the editor.
         <div class='container'>
             <div class='row'>
                 <div class='col-lg-3'>
-                    <button type="button" class='btn btn-primary' id='btn'>Give me a Sudoku</button>
+                    <button type="button" class='btn btn-primary' id='generate'>Give me a Sudoku</button>
+                    <button type="submit" class='btn btn-success' id='submit'>Submit</button>
                 </div>
-                <div id='grid' class='col-lg-6'></div>
+                <div id='grid' class='col-lg-6'>
+                    <form id="solution"></form>
+                </div>
                 <div id='spacer' class='col-lg-3'></div>
             </div>
         </div>
-        <script src="js/main.js"></script> 
+        <script src="js/main.js"></script>
     </body>
 </html>

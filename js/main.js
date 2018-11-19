@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-var btn = document.getElementById('btn');
+var generate_btn = document.getElementById('generate');
 var grid = document.getElementById('grid');
 
-btn.addEventListener('click', function () {
 
+generate_btn.addEventListener('click', function () {
     var url = 'http://localhost/Sudoku/api/get_puzzle.php';
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -27,13 +27,16 @@ btn.addEventListener('click', function () {
     request.send();
 });
 
+
 function renderGrid(data) {
     var HTMLtable = '<table>';
     for ($i = 0; $i < 9; $i++) {
         HTMLtable += '<tr id="' + $i + '">';
         for ($j = 0; $j < 9; $j++) {
             HTMLtable += '<td id="' + (($i * 9) + $j) + '">' +
-                    ((data[($i * 9) + $j] !== 0) ? data[($i * 9) + $j] : '<input type="text" autocomplete="off"/>') +
+                    ((data[($i * 9) + $j] !== 0) ? data[($i * 9) +
+                            $j] : '<input id="f' + (($i * 9) + $j) +
+                            '" type="text" pattern="[1-9]{1}" autocomplete="off"/>') +
                     '</td>';
         }
         HTMLtable += '</tr>';
