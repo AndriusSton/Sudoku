@@ -18,7 +18,7 @@ class Algorithm {
 
     
     /*
-     * Initial sudoku grid. Emoty cell is represented by value zero.
+     * Initial sudoku grid. Empty cell is represented by value zero.
      */
     const INITIAL_TABLE = array(
         0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -44,12 +44,12 @@ class Algorithm {
     public function getGrid() {
         return $this->generate();
     }
-
+    
     /*
      * Returns row number of the cell passed
      * 
      */
-    private function row($cell) {
+    protected function row($cell) {
         return (int) floor($cell / 9);
     }
 
@@ -57,7 +57,7 @@ class Algorithm {
      * Returns column number of the cell passed
      * 
      */
-    private function col($cell) {
+    protected function col($cell) {
         return (int) floor($cell % 9);
     }
 
@@ -65,7 +65,7 @@ class Algorithm {
      * Returns block number of the cell passed
      * 
      */
-    private function block($cell) {
+    protected function block($cell) {
         return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
     }
 
@@ -73,8 +73,8 @@ class Algorithm {
      * Removes a passed value from a passed array and returns a result
      * 
      */
-    private function removeFromPossible($arr, $numberToRemove) {
-        $modified = $arr;
+    protected function removeFromPossible($array, $numberToRemove) {
+        $modified = $array;
         if (!in_array($numberToRemove, $modified)) {
             return $modified;
         }
@@ -87,11 +87,11 @@ class Algorithm {
      * Returns a random number from an array passed
      * 
      */
-    private function getRandomNumber($arr) {
-        if (!empty($arr)) {
-            return $arr[rand(0, sizeof($arr) - 1)];
+    protected function getRandomNumber($array) {
+        if (!empty($array) || is_null($array)) {
+            return $array[rand(0, sizeof($array) - 1)];
         }
-        return 0;
+        throw new Exception('Empty array passed');
     }
 
     /*

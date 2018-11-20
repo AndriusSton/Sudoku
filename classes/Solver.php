@@ -11,7 +11,7 @@
  *
  * @author Andrius
  */
-class Solver {
+class Solver extends Algorithm {
 
     public function getSolution($puzzle) {
         $solution = array();
@@ -61,8 +61,50 @@ class Solver {
 
                 $solution[$j] = $this->getRandomNumber($possibleCellValues);
             }
+            return $solution;
+        } else {
+            throw new Exception('Passed paramater must be an array');
         }
+    }
 
+    public function solve($puzzle) {
+
+        if (!is_array($puzzle)) {
+            throw new Exception('Passed paramater must be an array');
+        }
+        $solution = $puzzle;
+        $wrongChoices = array();
+        $emptyCells = array_keys($puzzle, 0);
+
+        for ($j = 0; $j < sizeof($emptyCells); $j++) {
+
+            $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
+            if (empty($possibleCellValues)) {
+
+                do {
+                    $j--;
+                    $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
+                    if (array_key_exists($emptyCells[$j], $wrongChoices)) {
+                        array_push($wrongChoices[$emptyCells[$j]], $solution[$emptyCells[$j]]);
+                    } else {
+                        $wrongChoices[$emptyCells[$j]] = array($solution[$emptyCells[$j]]);
+                    }
+
+                    $solution[$emptyCells[$j]] = 0;
+                    if ($emptyCells[$j] < max(array_keys($wrongChoices))) {
+                        foreach (array_keys($wrongChoices) as $key) {
+                            if ($key > $emptyCells[$j]) {
+                                unset($wrongChoices[$key]);
+                            }
+                        }
+                    }
+                    foreach ($wrongChoices[$emptyCells[$j]] as $choice) {
+                        $possibleCellValues = $this->removeFromPossible($possibleCellValues, $choice);
+                    }
+                } while (sizeof($possibleCellValues) < 1);
+            }
+            $solution[$emptyCells[$j]] = $this->getRandomNumber($possibleCellValues);
+        }
         return $solution;
     }
 
@@ -92,60 +134,6 @@ class Solver {
 
         sort($possibleCellValues);
         return $possibleCellValues;
-    }
-
-    /*
-     * Returns row number of the cell passed
-     * 
-     */
-
-    private function row($cell) {
-        return (int) floor($cell / 9);
-    }
-
-    /*
-     * Returns column number of the cell passed
-     * 
-     */
-
-    private function col($cell) {
-        return (int) floor($cell % 9);
-    }
-
-    /*
-     * Returns block number of the cell passed
-     * 
-     */
-
-    private function block($cell) {
-        return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
-    }
-
-    /*
-     * Removes a passed value from a passed array and returns a result
-     * 
-     */
-
-    private function removeFromPossible($arr, $numberToRemove) {
-        $modified = $arr;
-        if (!in_array($numberToRemove, $modified)) {
-            return $modified;
-        }
-        unset($modified[array_keys($modified, $numberToRemove)[0]]);
-        sort($modified);
-        return $modified;
-    }
-
-    /*
-     * Returns a random number from an array passed
-     * 
-     */
-
-    private function getRandomNumber($arr) {
-        if (!empty($arr)) {
-            return $arr[rand(0, sizeof($arr) - 1)];
-        }
-        return 0;
     }
 
 }

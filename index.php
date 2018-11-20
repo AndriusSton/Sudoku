@@ -4,6 +4,8 @@ require 'C:\xampp\htdocs\Sudoku\classes\Puzzle.php';
 require 'C:\xampp\htdocs\Sudoku\classes\Solver.php';
 
 $puzzle = new Puzzle(new Algorithm(), 0);
+
+
 $puzzleArray = $puzzle->getPuzzle();
 
 $sudokuSolver = new Solver();
@@ -11,7 +13,7 @@ $sudokuSolver = new Solver();
 echo 'Puzzle: <br/><pre>';
 print_r($puzzleArray);
 echo '</pre>';
-$solution = $sudokuSolver->getSolution($puzzleArray);
+$solution = $sudokuSolver->solve($puzzleArray);
 
 echo 'Solution: <br/><pre>';
 print_r($solution);
