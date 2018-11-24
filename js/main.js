@@ -5,6 +5,8 @@
  */
 
 var generate_btn = document.getElementById('generate');
+var submit_btn = document.getElementById('submit');
+var solve_btn = document.getElementById('solve');
 var grid = document.getElementById('grid');
 
 
@@ -27,21 +29,54 @@ generate_btn.addEventListener('click', function () {
     request.send();
 });
 
+submit_btn.addEventListener('click', function () {
+    var url = 'http://localhost/Sudoku/ajax/submit.php';
+    var inputs = document.getElementsByTagName('input');
+    var formData = new FormData();
+
+    for (var i = 0; i < inputs.length; i++) {
+        formData.append(inputs[i].name, inputs[i].value);
+    }
+    console.log(formData);
+    var request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.send(formData);
+
+});
+
+solve_btn.addEventListener('click', function () {
+    var url = 'http://localhost/Sudoku/ajax/solve.php';
+    var cells = document.getElementsByTagName('td');
+    var formData = new FormData();
+    
+    for (var i = 0; i < cells.length; i++) {
+        if (cells[i].getElementsByTagName('input').length > 0) {
+            formData.append(cells[i].id, 0);
+        } else {
+            formData.append(cells[i].id, cells[i].innerHTML);
+        }
+
+    }
+    var request = new XMLHttpRequest();
+    request.open('POST', url, true);
+    request.send(formData);
+
+});
 
 function renderGrid(data) {
-    var HTMLtable = '<table>';
+    var HTMLtable = '<form action="ajax/submit.php" method="POST" id="solution"><table>';
     for ($i = 0; $i < 9; $i++) {
         HTMLtable += '<tr id="' + $i + '">';
         for ($j = 0; $j < 9; $j++) {
             HTMLtable += '<td id="' + (($i * 9) + $j) + '">' +
                     ((data[($i * 9) + $j] !== 0) ? data[($i * 9) +
-                            $j] : '<input id="f' + (($i * 9) + $j) +
+                            $j] : '<input name="' + (($i * 9) + $j) +
                             '" type="text" pattern="[1-9]{1}" autocomplete="off"/>') +
                     '</td>';
         }
         HTMLtable += '</tr>';
     }
-    HTMLtable += '</table>';
+    HTMLtable += '</table></form>';
     grid.insertAdjacentHTML('beforeend', HTMLtable);
 }
 

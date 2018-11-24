@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+include_once 'Algorithm.php';
 /**
  * Description of Solver
  *
@@ -13,6 +13,8 @@
  */
 class Solver extends Algorithm {
 
+    
+    
     public function getSolution($puzzle) {
         $solution = array();
         if (is_array($puzzle)) {
