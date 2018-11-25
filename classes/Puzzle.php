@@ -17,7 +17,7 @@ class Puzzle {
     private $puzzle = array();
 
     public function __construct(Algorithm $algorithm) {
-        $this->grid = $algorithm->getGrid();
+        $this->grid = $algorithm->generate();
     }
 
     public function getPuzzle() {

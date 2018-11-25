@@ -1,3 +1,19 @@
+<?php
+
+/*
+require_once 'classes/Solver.php';
+
+
+$solver = new Solver();
+$grid = $solver->generate();
+
+echo '<pre>';
+var_dump($grid);
+echo '<pre/>';
+die();
+*/
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

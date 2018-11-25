@@ -60,6 +60,18 @@ solve_btn.addEventListener('click', function () {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.send(formData);
+    
+    request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE) {
+            if (request.status >= 200 && request.status < 400) {
+                var responseText = JSON.parse(request.responseText);
+                clear();
+                renderGrid(responseText);
+            } else {
+                console.log("Error returned");
+            }
+        }
+    };
 
 });
 
