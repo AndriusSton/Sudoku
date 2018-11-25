@@ -14,7 +14,7 @@ include_once '../classes/Puzzle.php';
 include_once '../classes/Algorithm.php';
 
 // Instatiate puzzle object
-$puzzle = new Puzzle(new Algorithm(), 0);
+$puzzle = new Puzzle(new Algorithm(), 3);
 
 // Getting puzzle array
 $puzzleArray = $puzzle->getPuzzle();
