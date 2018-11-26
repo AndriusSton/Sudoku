@@ -14,10 +14,11 @@ include_once '../classes/Puzzle.php';
 include_once '../classes/Algorithm.php';
 
 // Instatiate puzzle object
-$puzzle = new Puzzle(new Algorithm(), 3);
+$puzzle = new Puzzle(new Algorithm());
+
 
 // Getting puzzle array
-$puzzleArray = $puzzle->getPuzzle();
+$puzzleArray = $puzzle->getPuzzle($_GET['level']);
 
 // JSON
 if($puzzleArray != null){

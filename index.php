@@ -1,19 +1,3 @@
-<?php
-
-/*
-require_once 'classes/Solver.php';
-
-
-$solver = new Solver();
-$grid = $solver->generate();
-
-echo '<pre>';
-var_dump($grid);
-echo '<pre/>';
-die();
-*/
-?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,15 +10,21 @@ die();
         <div class='container'>
             <div class='row'>
                 <div class='col-lg-3'>
+                    <form>
+                        <select id='level' class="form-control">
+                            <option value="1">Easy</option>
+                            <option value="2">Medium</option>
+                            <option value="3">Hard</option>
+                        </select>
+
+                    </form>
                     <button type="button" class='btn btn-danger' id='generate'>Give me a Sudoku</button>
-                    <button type="submit" class='btn btn-success' id='submit'>Submit</button>
                     <button type="submit" class='btn btn-primary' id='solve'>I give up</button>
                 </div>
                 <div id='grid' class='col-lg-6'>
-                    
+
                 </div>
                 <div id='spacer' class='col-lg-3'>
-                    <p id="serverResponse"></p>
                 </div>
             </div>
         </div>

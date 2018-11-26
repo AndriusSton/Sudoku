@@ -1,19 +1,10 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-var generate_btn = document.getElementById('generate');
-var submit_btn = document.getElementById('submit');
-var solve_btn = document.getElementById('solve');
-var grid = document.getElementById('grid');
-
-
-generate_btn.addEventListener('click', function () {
+document.getElementById('generate').addEventListener('click', function () {
     var url = 'http://localhost/Sudoku/api/get_puzzle.php';
+    var selector = document.getElementById('level');
+    var level = selector[selector.selectedIndex].value;
     var request = new XMLHttpRequest();
-    request.open('GET', url, true);
+    request.open('GET', url + '?level=' + level, true);
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
@@ -29,26 +20,11 @@ generate_btn.addEventListener('click', function () {
     request.send();
 });
 
-submit_btn.addEventListener('click', function () {
-    var url = 'http://localhost/Sudoku/ajax/submit.php';
-    var inputs = document.getElementsByTagName('input');
-    var formData = new FormData();
-
-    for (var i = 0; i < inputs.length; i++) {
-        formData.append(inputs[i].name, inputs[i].value);
-    }
-    console.log(formData);
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.send(formData);
-
-});
-
-solve_btn.addEventListener('click', function () {
+document.getElementById('solve').addEventListener('click', function () {
     var url = 'http://localhost/Sudoku/ajax/solve.php';
     var cells = document.getElementsByTagName('td');
     var formData = new FormData();
-    
+
     for (var i = 0; i < cells.length; i++) {
         if (cells[i].getElementsByTagName('input').length > 0) {
             formData.append(cells[i].id, 0);
@@ -60,7 +36,7 @@ solve_btn.addEventListener('click', function () {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.send(formData);
-    
+
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status >= 200 && request.status < 400) {
@@ -76,7 +52,8 @@ solve_btn.addEventListener('click', function () {
 });
 
 function renderGrid(data) {
-    var HTMLtable = '<form action="ajax/submit.php" method="POST" id="solution"><table>';
+    var grid = document.getElementById('grid');
+    var HTMLtable = '<table>';
     for ($i = 0; $i < 9; $i++) {
         HTMLtable += '<tr id="' + $i + '">';
         for ($j = 0; $j < 9; $j++) {
@@ -88,7 +65,7 @@ function renderGrid(data) {
         }
         HTMLtable += '</tr>';
     }
-    HTMLtable += '</table></form>';
+    HTMLtable += '</table>';
     grid.insertAdjacentHTML('beforeend', HTMLtable);
 }
 

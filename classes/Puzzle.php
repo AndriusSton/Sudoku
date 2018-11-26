@@ -1,47 +1,55 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Puzzle
+ * Puzzle class creates puzzle out of Sudoku grid. By creating a Puzzle object, 
+ * an Algorithm class object have to be passed for grid generation. 
  *
  * @author Andrius
  */
 class Puzzle {
 
-    private $grid = array();
-    private $puzzle = array();
+    private $algorithm;
+    private $level;
 
-    public function __construct(Algorithm $algorithm) {
-        $this->grid = $algorithm->generate();
+    public function __construct(Algorithm $sudoku) {
+        $this->algorithm = $sudoku;
     }
 
-    public function getPuzzle() {
-        $this->puzzle = $this->grid;
-        $removedCells = $this->getRemovedCells();
-        for ($i = 0; $i < sizeof($this->grid); $i++) {
+    private function setLevel($level) {
+        switch ($level):
+            case 1: $this->level = 20;
+                break;
+            case 2: $this->level = 40;
+                break;
+            case 3: $this->level = 50;
+                break;
+            default: $this->level = 40;
+        endswitch;
+    }
+
+    public function getPuzzle($level = 1) {
+        self::setLevel($level);
+        $puzzle = $this->algorithm->generate();
+        $removedCells = $this->getRemovedCells($puzzle);
+        for ($i = 0; $i < sizeof($puzzle); $i++) {
             if (in_array($i, $removedCells)) {
-                $this->puzzle[$i] = 0;
+                $puzzle[$i] = 0;
             }
         }
-        return $this->puzzle;
+        return $puzzle;
     }
 
-    private function getRemovedCells() {
+    private function getRemovedCells($puzzle) {
         $removedCells = array();
-        for ($i = 0; $i < 40; $i++) {
-            $indexToRemove = rand(0, 80);
+        for ($i = 0; $i < $this->level; $i++) {
+            $indexToRemove = rand(0, (sizeof($puzzle) - 1));
             while (in_array($indexToRemove, $removedCells)) {
-                $indexToRemove = rand(0, 80);
+                $indexToRemove = rand(0, (sizeof($puzzle) - 1));
             }
             $removedCells[$i] = $indexToRemove;
         }
         asort($removedCells);
         return $removedCells;
     }
-    
+
 }
