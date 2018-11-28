@@ -51,6 +51,7 @@ document.getElementById('solve').addEventListener('click', function () {
 
 });
 
+
 function renderGrid(data) {
     var grid = document.getElementById('grid');
     var HTMLtable = '<table>';

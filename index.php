@@ -9,6 +9,7 @@
     <body>
         <div class='container'>
             <div class='row'>
+                <div class='col-lg-3'></div>
                 <div class='col-lg-3'>
                     <form>
                         <select id='level' class="form-control">
@@ -16,15 +17,22 @@
                             <option value="2">Medium</option>
                             <option value="3">Hard</option>
                         </select>
-
                     </form>
+                </div>
+                <div class='col-lg-3'>
                     <button type="button" class='btn btn-danger' id='generate'>Give me a Sudoku</button>
                     <button type="submit" class='btn btn-primary' id='solve'>I give up</button>
+                    <button type="submit" class='btn btn-success' id='hint'>I need a hint</button>
+                </div>
+                <div class='col-lg-3'></div>
+            </div>
+
+            <div class='row'>
+                <div class='col-lg-3'>
                 </div>
                 <div id='grid' class='col-lg-6'>
-
                 </div>
-                <div id='spacer' class='col-lg-3'>
+                <div class='col-lg-3'>
                 </div>
             </div>
         </div>

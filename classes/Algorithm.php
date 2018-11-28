@@ -120,31 +120,13 @@ class Algorithm {
      */
 
     private function getPossibleValues($cell, $table) {
-        $possibleCellValues = self::INITIAL_POSSIBLE_VALUES;
-
-        for ($i = 0; $i < 9; $i++) {
-            $valueToUnset = $table[($i * 9 + $this->col($cell))];
-            if (in_array($valueToUnset, $possibleCellValues)) {
-                unset($possibleCellValues[array_keys($possibleCellValues, $valueToUnset)[0]]);
-            }
-        }
-
-        for ($i = 0; $i < 9; $i++) {
-            $valueToUnset = $table[$this->row($cell) * 9 + $i];
-            if (in_array($valueToUnset, $possibleCellValues)) {
-                unset($possibleCellValues[array_keys($possibleCellValues, $valueToUnset)[0]]);
-            }
-        }
-
-        for ($i = 0; $i < 9; $i ++) {
-            $valueToUnset = $table[floor($this->block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($this->block($cell) % 3)];
-            if (in_array($valueToUnset, $possibleCellValues)) {
-                unset($possibleCellValues[array_keys($possibleCellValues, $valueToUnset)[0]]);
-            }
-        }
-
-        sort($possibleCellValues);
-        return $possibleCellValues;
+        $possibleValues = array_diff(
+                self::INITIAL_POSSIBLE_VALUES, 
+                self::getRowArray($cell, $table),
+                self::getColArray($cell, $table),
+                self::getBlockArray($cell, $table));
+        sort($possibleValues);
+        return $possibleValues;
     }
 
     /*
@@ -174,5 +156,29 @@ class Algorithm {
         return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
     }
 
+    
+    private function getRowArray($cell, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $cells[] = $table[($i * 9 + $this->col($cell))];
+        }
+        return $cells;
+    }
+
+    private function getColArray($cell, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $cells[] = $table[$this->row($cell) * 9 + $i];
+        }
+        return $cells;
+    }
+
+    private function getBlockArray($cell, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $cells[] = $table[floor($this->block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($this->block($cell) % 3)];
+        }
+        return $cells;
+    }
 
 }
