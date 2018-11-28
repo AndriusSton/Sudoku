@@ -8,6 +8,7 @@
  *
  * @author Andrius
  */
+
 class Algorithm {
     /*
      * Initial sudoku grid. Empty cell is represented by value zero.
@@ -42,6 +43,7 @@ class Algorithm {
         }
         $solution = $puzzle;
         $wrongChoices = array();
+
         $emptyCells = array_keys($puzzle, 0);
 
         // Iterate through empty cells and randomly select the number
@@ -89,16 +91,16 @@ class Algorithm {
 
                     // Remove each wrong choice from possible cell values array
                     // at the observed cell index
-                    foreach ($wrongChoices[$emptyCells[$j]] as $choice) {
-                        $possibleCellValues = $this->removeFromPossible($possibleCellValues, $choice);
-                    }
+                    $possibleCellValues = array_diff($possibleCellValues, $wrongChoices[$emptyCells[$j]]);
+                    sort($possibleCellValues);
+
                     // Do the steps while there is nothing to choose from
                 } while (sizeof($possibleCellValues) < 1);
             }
 
             // Randomly select and asign a number from possible cell value
             // array
-            $solution[$emptyCells[$j]] = $this->getRandomNumber($possibleCellValues);
+            $solution[$emptyCells[$j]] = $possibleCellValues[array_rand($possibleCellValues, 1)];
         }
         return $solution;
     }
@@ -146,33 +148,6 @@ class Algorithm {
     }
 
     /*
-     * Removes a passed value from a passed array and returns a result
-     * 
-     */
-
-    private function removeFromPossible($array, $numberToRemove) {
-        $modified = $array;
-        if (!in_array($numberToRemove, $modified)) {
-            return $modified;
-        }
-        unset($modified[array_keys($modified, $numberToRemove)[0]]);
-        sort($modified);
-        return $modified;
-    }
-
-    /*
-     * Returns a random number from an array passed
-     * 
-     */
-
-    private function getRandomNumber($array) {
-        if (!empty($array) || is_null($array)) {
-            return $array[rand(0, sizeof($array) - 1)];
-        }
-        throw new Exception('Empty array passed');
-    }
-
-    /*
      * Returns row number of the cell passed
      * 
      */
@@ -198,5 +173,6 @@ class Algorithm {
     private function block($cell) {
         return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
     }
+
 
 }
