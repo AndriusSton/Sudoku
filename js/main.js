@@ -1,5 +1,6 @@
 
 document.getElementById('generate').addEventListener('click', function () {
+    sessionStorage.clear();
     var url = 'http://localhost/Sudoku/api/get_puzzle.php';
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
@@ -10,6 +11,7 @@ document.getElementById('generate').addEventListener('click', function () {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status >= 200 && request.status < 400) {
                 var responseText = JSON.parse(request.responseText);
+                sessionStorage.setItem('initial', request.responseText);
                 clear();
                 renderGrid(responseText);
             } else {
@@ -51,8 +53,14 @@ document.getElementById('solve').addEventListener('click', function () {
 
 });
 
+document.getElementById('reset').addEventListener('click', function () {
+    clear();
+    renderGrid(JSON.parse(sessionStorage.getItem('initial')));
+});
+
 
 function renderGrid(data) {
+    clear();
     var grid = document.getElementById('grid');
     var HTMLtable = '<table>';
     for ($i = 0; $i < 9; $i++) {

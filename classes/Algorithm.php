@@ -51,7 +51,7 @@ class Algorithm {
         for ($j = 0; $j < sizeof($emptyCells); $j++) {
 
             // Get possible values for the $j cell in a grid
-            $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
+            $possibleCellValues = self::getPossibleValues($emptyCells[$j], $solution);
 
             // IF there is nothing to choose, iterate the following steps until
             // the possible cell value array has at least 2 values to select
@@ -64,7 +64,7 @@ class Algorithm {
                     $j--;
 
                     // get the previous cell values for that index
-                    $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
+                    $possibleCellValues = self::getPossibleValues($emptyCells[$j], $solution);
 
                     // form an array of wrong choices at the cell
                     if (array_key_exists($emptyCells[$j], $wrongChoices)) {
@@ -121,10 +121,7 @@ class Algorithm {
 
     private function getPossibleValues($cell, $table) {
         $possibleValues = array_diff(
-                self::INITIAL_POSSIBLE_VALUES, 
-                self::getRowArray($cell, $table),
-                self::getColArray($cell, $table),
-                self::getBlockArray($cell, $table));
+                self::INITIAL_POSSIBLE_VALUES, self::getRowArray($cell, $table), self::getColArray($cell, $table), self::getBlockArray($cell, $table));
         sort($possibleValues);
         return $possibleValues;
     }
@@ -153,32 +150,50 @@ class Algorithm {
      */
 
     private function block($cell) {
-        return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
+        return floor(self::row($cell) / 3) * 3 + floor(self::col($cell) / 3);
     }
 
-    
-    private function getRowArray($cell, $table) {
+    public function getRowArray($cell, $table) {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $cells[] = $table[($i * 9 + $this->col($cell))];
+            $index = $i * 9 + self::col($cell);
+            $cells[$index] = $table[$index];
         }
         return $cells;
     }
 
-    private function getColArray($cell, $table) {
+    public function getColArray($cell, $table) {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $cells[] = $table[$this->row($cell) * 9 + $i];
+            $index = self::row($cell) * 9 + $i;
+            $cells[$index] = $table[$index];
         }
         return $cells;
     }
 
-    private function getBlockArray($cell, $table) {
+    public function getBlockArray($cell, $table) {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $cells[] = $table[floor($this->block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($this->block($cell) % 3)];
+            $index = floor(self::block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * (self::block($cell) % 3);
+            $cells[$index] = $table[$index];
         }
         return $cells;
+    }
+
+    public function validateEnteredValue($enteredValue, $cell, $table) {
+        if (in_array($enteredValue, self::getRowArray($cell, $table))) {
+            return array_search($enteredValue, self::getRowArray($cell, $table));
+        }
+
+        if (in_array($enteredValue, self::getColArray($cell, $table))) {
+            return array_search($enteredValue, self::getColArray($cell, $table));
+        }
+
+        if (in_array($enteredValue, self::getBlockArray($cell, $table))) {
+            return array_search($enteredValue, self::getBlockArray($cell, $table));
+        }
+
+        return false;
     }
 
 }

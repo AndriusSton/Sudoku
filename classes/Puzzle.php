@@ -30,7 +30,7 @@ class Puzzle {
     public function getPuzzle($level = 1) {
         self::setLevel($level);
         $puzzle = $this->algorithm->generate();
-        $removedCells = $this->getRemovedCells($puzzle);
+        $removedCells = self::getRemovedCells($puzzle);
         for ($i = 0; $i < sizeof($puzzle); $i++) {
             if (in_array($i, $removedCells)) {
                 $puzzle[$i] = 0;

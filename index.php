@@ -20,9 +20,9 @@
                     </form>
                 </div>
                 <div class='col-lg-3'>
-                    <button type="button" class='btn btn-danger' id='generate'>Give me a Sudoku</button>
-                    <button type="submit" class='btn btn-primary' id='solve'>I give up</button>
-                    <button type="submit" class='btn btn-success' id='hint'>I need a hint</button>
+                    <button type="button" class='btn btn-danger' id='generate'>Generate</button>
+                    <button type="button" class='btn btn-primary' id='solve'>Solution</button>
+                    <button type="button" class='btn btn-primary' id='reset'>Reset</button>      
                 </div>
                 <div class='col-lg-3'></div>
             </div>
