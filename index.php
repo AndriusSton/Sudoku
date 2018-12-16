@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +23,8 @@
                 <div class='col-lg-3'>
                     <button type="button" class='btn btn-danger' id='generate'>Generate</button>
                     <button type="button" class='btn btn-primary' id='solve'>Solution</button>
-                    <button type="button" class='btn btn-primary' id='reset'>Reset</button>      
+                    <button type="button" class='btn btn-primary' id='reset'>Reset</button>
+                    <button type="button" class='btn btn-primary' id='getpdf'>Get PDF</button>
                 </div>
                 <div class='col-lg-3'></div>
             </div>

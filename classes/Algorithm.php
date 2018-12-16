@@ -180,20 +180,4 @@ class Algorithm {
         return $cells;
     }
 
-    public function validateEnteredValue($enteredValue, $cell, $table) {
-        if (in_array($enteredValue, self::getRowArray($cell, $table))) {
-            return array_search($enteredValue, self::getRowArray($cell, $table));
-        }
-
-        if (in_array($enteredValue, self::getColArray($cell, $table))) {
-            return array_search($enteredValue, self::getColArray($cell, $table));
-        }
-
-        if (in_array($enteredValue, self::getBlockArray($cell, $table))) {
-            return array_search($enteredValue, self::getBlockArray($cell, $table));
-        }
-
-        return false;
-    }
-
 }
