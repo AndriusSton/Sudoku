@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,19 +11,14 @@
             <div class='row'>
                 <div class='col-lg-3'></div>
                 <div class='col-lg-3'>
-                    <form>
-                        <select id='level' class="form-control">
-                            <option value="1">Easy</option>
-                            <option value="2">Medium</option>
-                            <option value="3">Hard</option>
-                        </select>
-                    </form>
                 </div>
                 <div class='col-lg-3'>
-                    <button type="button" class='btn btn-danger' id='generate'>Generate</button>
                     <button type="button" class='btn btn-primary' id='solve'>Solution</button>
                     <button type="button" class='btn btn-primary' id='reset'>Reset</button>
                     <button type="button" class='btn btn-primary' id='getpdf'>Get PDF</button>
+                    <button type="button" class='btn btn-primary' id='easy'>Easy</button>
+                    <button type="button" class='btn btn-primary' id='medium'>Medium</button>
+                    <button type="button" class='btn btn-primary' id='hard'>Hard</button>
                 </div>
                 <div class='col-lg-3'></div>
             </div>
