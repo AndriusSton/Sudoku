@@ -6,6 +6,8 @@
  *
  * @author Andrius
  */
+include_once '../config/sudoku_defines.php';
+
 class Puzzle {
 
     private $algorithm;
@@ -16,20 +18,26 @@ class Puzzle {
     }
 
     private function setLevel($level) {
-        switch ($level):
-            case 1: $this->level = 20;
-                break;
-            case 2: $this->level = 40;
-                break;
-            case 3: $this->level = 50;
-                break;
-            default: $this->level = 40;
-        endswitch;
+        if (in_array($level, array_keys(SUDOKU_LEVELS))) {
+            $this->level = SUDOKU_LEVELS[$level];
+        } else {
+            throw new Exception('Error: no such level defined');
+        }
     }
 
-    public function getPuzzle($level = 1) {
-        self::setLevel($level);
-        $puzzle = $this->algorithm->generate();
+    public function getPuzzle($level) {
+        try {
+            self::setLevel($level);
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+
+        try {
+            $puzzle = $this->algorithm->generate();
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+
         $removedCells = self::getRemovedCells($puzzle);
         for ($i = 0; $i < sizeof($puzzle); $i++) {
             if (in_array($i, $removedCells)) {

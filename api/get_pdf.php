@@ -4,14 +4,17 @@ include_once '../classes/Puzzle.php';
 include_once '../classes/Algorithm.php';
 include_once '../classes/PDFGenerator.php';
 
+
+
 // Instatiate puzzle object
 $puzzle = new Puzzle(new Algorithm());
 
 // Getting puzzle array
-$puzzleArray = $puzzle->getPuzzle(2);
+$puzzleArray = $puzzle->getPuzzle('medium');
 
 // create new PDF document
 $pdf = new PDFGenerator(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
 
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -30,6 +33,19 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// Colors, line width and bold font
+$pdf->SetFillColor(255, 0, 0);
+$pdf->SetTextColor(255);
+$pdf->SetDrawColor(128, 0, 0);
+$pdf->SetLineWidth(0.3);
+$pdf->SetFont('', 'B');
+
+
+// Color and font restoration
+$pdf->SetFillColor(224, 235, 255);
+$pdf->SetTextColor(0);
+$pdf->SetFont('');
 
 // set some language-dependent strings (optional)
 if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {

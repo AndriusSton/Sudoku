@@ -38,8 +38,8 @@ class Algorithm {
 
     public function solve($puzzle) {
 
-        if (!is_array($puzzle)) {
-            throw new Exception('Passed paramater must be an array');
+        if (sizeof($puzzle) != 81) {
+            throw new Exception('9x9 sudoku is expected');
         }
         $solution = $puzzle;
         $wrongChoices = array();

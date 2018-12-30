@@ -1,4 +1,5 @@
 // BUTTON LISTENERS
+
 document.getElementById('easy').addEventListener('click', function () {
     requestGrid('easy');
 });
@@ -95,42 +96,49 @@ function requestGrid(level) {
         }
     };
 
-        request.send();
+    request.send();
+}
+
+function renderGrid(data) {
+    var HTMLtable = '<form id="sudoku"><table>';
+    for ($i = 0; $i < 9; $i++) {
+        HTMLtable += '<tr id="' + $i + '">';
+        for ($j = 0; $j < 9; $j++) {
+            HTMLtable += '<td id="' + (($i * 9) + $j) + '">' +
+                    ((data[($i * 9) + $j] !== 0) ? data[($i * 9) +
+                            $j] : '<input name="' + (($i * 9) + $j) +
+                            '" type="text" pattern="[1-9]{1}" autocomplete="off"/>') +
+                    '</td>';
+        }
+        HTMLtable += '</tr>';
+    }
+    HTMLtable += '</table></form>';
+    document.getElementById('grid').insertAdjacentHTML('beforeend', HTMLtable);
+    styling();
+}
+
+function clear() {
+    document.getElementById('grid').innerHTML = '';
+}
+
+function getGridInputs() {
+    var inputs = document.getElementById('sudoku').getElementsByTagName('input');
+    var inputArray = new Array();
+    if (inputs.length !== 20 && inputs.length !== 40 && inputs.length !== 50) {
+        console.log('ERROR: problem with inputs')
     }
 
-    function renderGrid(data) {
-        var HTMLtable = '<form id="sudoku"><table>';
-        for ($i = 0; $i < 9; $i++) {
-            HTMLtable += '<tr id="' + $i + '">';
-            for ($j = 0; $j < 9; $j++) {
-                HTMLtable += '<td id="' + (($i * 9) + $j) + '">' +
-                        ((data[($i * 9) + $j] !== 0) ? data[($i * 9) +
-                                $j] : '<input name="' + (($i * 9) + $j) +
-                                '" type="text" pattern="[1-9]{1}" autocomplete="off"/>') +
-                        '</td>';
-            }
-            HTMLtable += '</tr>';
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].length > 0) {
+            inputArray[inputs[i].name] = '0';
         }
-        HTMLtable += '</table></form>';
-        grid.insertAdjacentHTML('beforeend', HTMLtable);
+        inputArray[inputs[i].name] = inputs[i].value;
     }
+}
 
-    function clear() {
-        document.getElementById('grid').innerHTML = '';
-    }
-
-    function getGridInputs() {
-        var inputs = document.getElementById('sudoku').getElementsByTagName('input');
-        var inputArray = new Array();
-        if (inputs.length !== 20 && inputs.length !== 40 && inputs.length !== 50) {
-            console.log('ERROR: problem with inputs')
-        }
-
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].length > 0) {
-                inputArray[inputs[i].name] = '0';
-            }
-            inputArray[inputs[i].name] = inputs[i].value;
-        }
-
+function styling() {
+    document.getElementById('controls').classList.remove('hidden');
+    document.getElementById('grid-container').classList.remove('hidden');
+    document.getElementById('controls').classList.add('controlsTransition');
+    document.getElementById('grid-container').classList.add('basicTransition');
 }

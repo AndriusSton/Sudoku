@@ -2,36 +2,177 @@
     Created on : Sep 6, 2018, 5:46:30 AM
     Author     : Andrius
 */
+/* ----- RESET ----- */
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    background-color:  #FFF;
+}
+h2 {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+/*---------------------------------------------*/
+
+.container {
+    max-width: 500px;
+    margin: 0 auto 0 auto;
+    background-color: #f2f3f4;
+    position: relative;
+    padding: 3%;
+    top: 10vh;
+}
+
+#level-menu {
+    margin-bottom: 2%;
+}
+
+h2 {
+    font-family: Helvetica;
+    font-size: 2em;
+    color: #4CAF50;
+    margin-bottom: 2%;
+}
+
+#level-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.level-btn {
+    box-sizing: border-box;
+    border: none;
+    cursor: pointer;
+    background-color: #f2f3f4;
+    text-align: center;
+    width: 150px;
+    height: 50px;
+    border-radius: 5%;
+    border: solid 2px #4CAF50;
+    font-family: Helvetica;
+    font-size: 0.9em;
+    color: #4CAF50;
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease 0s;
+}
+
+.level-btn:hover {
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    background-color: rgba(255, 255, 255, .3);
+    transform: translateY(-6px);
+}
 
 
-/* ------------- Grid Styling -------------- */
+
+#grid-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+#grid {
+    flex-basis: 50%;
+}
+
+#controls {
+    margin-right: -175px;
+}
+
+.hidden {
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+}
+
+.controlsTransition {
+    transition: 0.3s;
+    -moz-transition: 0.3s;
+    margin-right: 20px !important;
+}
+
+.basicTransition {
+    transition: 1s;
+    -moz-transition: 1s;
+    opacity: 1;
+}
+
+.grid-control-btn {
+    width: 100px;
+    height: 100px;
+    border: solid 2px #4CAF50;
+    border-radius: 50%;
+    margin: 2%;
+    font-family: Helvetica;
+    font-size: 0.9em;
+    color: #4CAF50;
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
+.grid-control-btn:hover {
+    background-color: rgba(255, 255, 255, .4);
+    color: #4CAF50;
+}
+
+/* ----- MEDIAQUERIES -----*/
+/* start of desktop styles */
+
+@media screen and (max-width: 991px) {
+    /* start of large tablet styles */
+
+}
+
+@media screen and (max-width: 767px) {
+    /* start of medium tablet styles */
+
+}
+
+@media screen and (max-width: 479px) {
+    /* start of phone styles */
+
+}
+
+/* ----- Grid Styling ----- */
 td {
-    height: 40px;
-    width: 40px;
+    height: 25px;
+    width: 25px;
     text-align: center;
     border-style: solid;
     border-width: 1px;
 }
-/* ------------ Grid Styling End------------ */
+/* ----- Grid Styling End -----  */
 
 
-/* ------------ Input Styling------------ */
+/* ----- Input Styling ----- */
 input {
     display: block;
     padding-left: 25%;
     margin: 0;
     border: 0;
-    width: 100%;
-    height: 100%;
+    height: 90%;
+    width: 75%;
     color: darkmagenta;
     font-style: italic;
     font-size: 1.3em;
     background-color:  #f2f3f4;
 }
-/* ------------ Input Styling End------------ */
+/* ----- Input Styling End ----- */
 
 
-/* ------------- Block Styling ------------ */
+/* ----- Block Styling ----- */
 [id='3'], [id='6'], [id='9'], [id='12'], [id='15'], [id='18'], [id='21'], 
 [id='24'], [id='27'], [id='30'], [id='33'], [id='36'], [id='39'], [id='42'],
 [id='45'], [id='48'], [id='51'], [id='54'], [id='57'], [id='60'], [id='63'],
@@ -55,4 +196,6 @@ input {
 [id='75'], [id='76'], [id='76'], [id='77'], [id='78'], [id='79'], [id='80'] {
     border-bottom: 2px solid black;
 }
-/* ----------- Block Styling End ---------- */
+/* ----- Block Styling End ----- */
+
+
