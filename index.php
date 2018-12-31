@@ -3,12 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Sudoku</title>
-        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <link rel="stylesheet" type="text/css" href="style.css"/>  
     </head>
     <body>
         <div class="container">
             <div id="level-menu">
-                <h2>Choose Your level and PLAY!</h2>             
+                <h1>Choose Your level and PLAY!</h1>             
                 <ul id="level-list">
                     <li><button type="button" class="level-btn" id="easy">Easy</button></li>
                     <li><button type="button" class="level-btn" id="medium">Medium</button></li>
@@ -23,7 +23,8 @@
                 </ul>
             </div>
             <div id="pdf-generator">
-                <button type="button" id='getpdf'>Get PDF</button>
+                <button type="button" id='getpdf' class='grid-control-btn'>Get PDF</button>
+                <h3>Click the button for PDF Download</h3>
             </div>
         </div>
         <script src="js/main.js"></script>
