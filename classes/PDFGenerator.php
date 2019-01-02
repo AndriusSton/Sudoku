@@ -10,15 +10,21 @@ require_once('../tcpdf/tcpdf.php');
 
 class PDFGenerator extends TCPDF {
 
-    private $puzzle = null;
-    private $layout;
+    public function renderPDF($numOfGrids) {
 
-    public function setLayout($layout) {
-        $this->layout = $layout;
-    }
-
-    public function setPuzzle(Puzzle $puzzle) {
-        $this->puzzle = $puzzle;
+        for ($i = 0; $i < $numOfGrids; $i++) {
+            if ($i % 6 === 0) {
+                self::addPage();
+                $offsetY = 0;
+            }
+            if ($i % 2 === 0) {
+                self::Multicell((8 * 9), (8 * 9), 'First GRID', 1, 'L', 1, 1, 10, (($offsetY * 8 * 9) + 20 + ($offsetY * 10)), true, '', true);
+            } else {
+                $offsetY--;
+                self::Multicell((8 * 9), (8 * 9), 'Second GRID', 1, 'L', 1, 1, (8 * 9 + 20), (($offsetY * 8 * 9) + 20 + ($offsetY * 10)), true, '', true);
+            }
+            $offsetY++;
+        }
     }
 
     public function renderGrid($grid) {
@@ -34,6 +40,24 @@ class PDFGenerator extends TCPDF {
             }
             $this->Ln();
         }
+    }
+
+    public function gridToHTML($grid) {
+        $HTMLtable = '<table style="border-collapse: collapse; border: 3px solid #000; width: 225px;">';
+        for ($i = 0; $i < 9; $i++) {
+            $HTMLtable .= '<tr>';
+            for ($j = 0; $j < 9; $j++) {
+                $HTMLtable .= '<td style="height: 25px; border-right:  ' . 
+                        (($j+1)%3 === 0? '3' : '1') . 
+                        'px solid #000; border-bottom: ' . 
+                        (($i+1)%3 === 0? '3' : '1') . 
+                        'px solid #000; text-align: center">' .
+                (($grid[($i * 9) + $j] !== 0) ? $grid[($i * 9) +$j] : ' ') . '</td>';
+            }
+            $HTMLtable .= '</tr>';
+        }
+        $HTMLtable .= '</table>';
+        return $HTMLtable;
     }
 
 }

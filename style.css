@@ -2,14 +2,17 @@
     Created on : Sep 6, 2018, 5:46:30 AM
     Author     : Andrius
 */
+
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700');
 /* ----- RESET ----- */
 html, body {
     padding: 0;
     margin: 0;
     height: 100%;
-    background-color:  #FFF;
+    background-color: #CBD9BB;
+    font-family: 'PT Sans Narrow', sans-serif;
 }
-h2 {
+h1 {
     padding: 0;
     margin: 0;
 }
@@ -28,57 +31,57 @@ table {
 .container {
     max-width: 500px;
     margin: 0 auto 0 auto;
-    background-color: #f2f3f4;
     position: relative;
     padding: 3%;
-    top: 10vh;
+    top: 3vh;
 }
 
 #level-menu {
-    margin-bottom: 2%;
+    padding: 2%;
+    background-color: #567755;
 }
 
-h2 {
-    font-family: Helvetica;
-    font-size: 2em;
-    color: #4CAF50;
+h1 {
+    padding: 2%;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 1.8em;
+    color: #CBD9BB;
     margin-bottom: 2%;
+    text-align: center;
 }
 
 #level-list {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 3%;
+    padding-top: 1%;
 }
 
 .level-btn {
     box-sizing: border-box;
-    border: none;
     cursor: pointer;
-    background-color: #f2f3f4;
     text-align: center;
     width: 150px;
-    height: 50px;
+    height: 45px;
     border-radius: 5%;
-    border: solid 2px #4CAF50;
-    font-family: Helvetica;
     font-size: 0.9em;
-    color: #4CAF50;
-    background-color: rgba(255, 255, 255, 0);
+    color: #465F8D;
+
+    background-color: rgba(203, 217, 187, 0.7);
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.1s ease 0s;
 }
 
 .level-btn:hover {
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
-    background-color: rgba(255, 255, 255, .3);
-    transform: translateY(-6px);
+    transform: translateY(-5px);
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.2);
+    background-color: rgba(203, 217, 187, 0.9);
 }
-
-
 
 #grid-container {
     display: flex;
     justify-content: space-around;
+    background-color: #CBD9BB;
 }
 
 #grid {
@@ -96,35 +99,50 @@ h2 {
 }
 
 .controlsTransition {
-    transition: 0.3s;
-    -moz-transition: 0.3s;
+    transition: 0.5s;
+    -moz-transition: 0.5s;
     margin-right: 20px !important;
 }
 
 .basicTransition {
-    transition: 1s;
-    -moz-transition: 1s;
+    padding: 3%;
+    transition: 0.5s;
+    -moz-transition: 0.5s;
     opacity: 1;
 }
 
 .grid-control-btn {
-    width: 100px;
-    height: 100px;
-    border: solid 2px #4CAF50;
-    border-radius: 50%;
+    width: 80px;
+    height: 50px;
+    border-radius: 5%;
     margin: 2%;
-    font-family: Helvetica;
     font-size: 0.9em;
-    color: #4CAF50;
-    background-color: rgba(255, 255, 255, 0);
+    color: #465F8D;
+    background-color: rgba(203, 217, 187, .7);
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease 0s;
     cursor: pointer;
 }
 
 .grid-control-btn:hover {
-    background-color: rgba(255, 255, 255, .4);
-    color: #4CAF50;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.2);
+}
+
+#pdf-generator {
+    display: flex;
+    background-color:  #101E24;
+    padding: 2%;
+    align-content: center;
+}
+
+h3 {
+    flex: 1;
+    font-size: 1em;
+    color: #CBD9BB;
+}
+
+#getpdf {
+
 }
 
 /* ----- MEDIAQUERIES -----*/
@@ -152,6 +170,7 @@ td {
     text-align: center;
     border-style: solid;
     border-width: 1px;
+    color: #101E24;
 }
 /* ----- Grid Styling End -----  */
 

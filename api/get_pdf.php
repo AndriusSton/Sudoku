@@ -10,6 +10,10 @@ include_once '../classes/PDFGenerator.php';
 $puzzle = new Puzzle(new Algorithm());
 
 // Getting puzzle array
+$arrayofPuzzles = array();
+for ($i = 0; $i < 9; $i++) {
+    $arrayofPuzzles[] = $puzzle->getPuzzle('medium');
+}
 $puzzleArray = $puzzle->getPuzzle('medium');
 
 // create new PDF document
@@ -43,7 +47,7 @@ $pdf->SetFont('', 'B');
 
 
 // Color and font restoration
-$pdf->SetFillColor(224, 235, 255);
+$pdf->SetFillColor(255, 255, 255);
 $pdf->SetTextColor(0);
 $pdf->SetFont('');
 
@@ -58,11 +62,31 @@ if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
 $pdf->SetFont('helvetica', '', 12);
 
 // add a page
-$pdf->AddPage();
-
+//$pdf->AddPage();
+//$y = $pdf->getY();
+//$txt = $pdf->gridToHTML($puzzleArray);
+//$pdf->writeHTML($txt,true, false, true, false, '');
 // print sudoku grid
-$pdf->renderGrid($puzzleArray);
-
+//$pdf->renderPDF(111);
 // ---------------------------------------------------------
 // close and output PDF document
+
+
+for ($i = 0; $i < 9; $i++) {
+
+
+    if ($i % 6 === 0) {
+        $pdf->addPage();
+    }
+    $y = ($i > 1)? $pdf->getY()+7 : $pdf->getY();
+
+
+    $txt = $pdf->gridToHTML($arrayofPuzzles[$i]);
+    if ($i % 2 === 0) {
+        $pdf->writeHTMLCell('80', '', '', $y, $txt, 0, 0, 1, true, 'J', true);
+    } else {
+        $pdf->writeHTMLCell('80', '', '', '', $txt, 0, 1, 1, true, 'J', true);
+    }
+}
+
 $pdf->Output('sudoku.pdf', 'I');
