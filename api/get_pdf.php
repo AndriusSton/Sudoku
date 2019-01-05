@@ -6,11 +6,12 @@ include_once '../classes/PDFGenerator.php';
 
 
 if (isset($_GET['num']) && isset($_GET['level'])) {
-    if (!filter_var($_GET['num'], FILTER_VALIDATE_INT) === false && !in_array($_GET['level'], SUDOKU_LEVELS)) {
+    if (!filter_var($_GET['num'], FILTER_VALIDATE_INT) === false && in_array($_GET['level'], array_keys(SUDOKU_LEVELS))) {
+        
         $numOfGrids = $_GET['num'];
         $level = $_GET['level'];
         unset($_GET);
-        if ($numOfGrids > 0 && $numOfGrids < 100) {
+        if ($numOfGrids > 0 && $numOfGrids < 101) {
 
             // Instatiate puzzle object
             $puzzle = new Puzzle(new Algorithm());
