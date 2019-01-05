@@ -10,20 +10,69 @@ require_once('../tcpdf/tcpdf.php');
 
 class PDFGenerator extends TCPDF {
 
-    public function renderPDF($numOfGrids) {
+    private $puzzleCollection;
 
-        for ($i = 0; $i < $numOfGrids; $i++) {
+    public function setFormating() {
+        // set header and footer fonts
+        self::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        self::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+        self::SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+        self::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        self::SetHeaderMargin(PDF_MARGIN_HEADER);
+        self::SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+        self::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+        self::setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// Colors, line width and bold font
+        self::SetFillColor(255, 0, 0);
+        self::SetTextColor(255);
+        self::SetDrawColor(128, 0, 0);
+        self::SetLineWidth(0.3);
+        self::SetFont('', 'B');
+
+
+// Color and font restoration
+        self::SetFillColor(255, 255, 255);
+        self::SetTextColor(0);
+        self::SetFont('');
+
+// set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+            require_once(dirname(__FILE__) . '/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+// ---------------------------------------------------------
+// set font
+        self::SetFont('helvetica', '', 12);
+    }
+
+    public function setPuzzleCollection(Array $puzzleCollection) {
+        $this->puzzleCollection = $puzzleCollection;
+    }
+
+    public function renderPDF() {
+        for ($i = 0; $i < sizeof($this->puzzleCollection); $i++) {
+
             if ($i % 6 === 0) {
                 self::addPage();
-                $offsetY = 0;
             }
+            $y = ($i > 1) ? self::getY() + 7 : self::getY();
+
+            $txt = self::gridToHTML($this->puzzleCollection[$i]);
             if ($i % 2 === 0) {
-                self::Multicell((8 * 9), (8 * 9), 'First GRID', 1, 'L', 1, 1, 10, (($offsetY * 8 * 9) + 20 + ($offsetY * 10)), true, '', true);
+                self::writeHTMLCell('80', '', '', $y, $txt, 0, 0, 1, true, 'J', true);
             } else {
-                $offsetY--;
-                self::Multicell((8 * 9), (8 * 9), 'Second GRID', 1, 'L', 1, 1, (8 * 9 + 20), (($offsetY * 8 * 9) + 20 + ($offsetY * 10)), true, '', true);
+                self::writeHTMLCell('80', '', '', '', $txt, 0, 1, 1, true, 'J', true);
             }
-            $offsetY++;
         }
     }
 
@@ -42,17 +91,17 @@ class PDFGenerator extends TCPDF {
         }
     }
 
-    public function gridToHTML($grid) {
+    private function gridToHTML($grid) {
         $HTMLtable = '<table style="border-collapse: collapse; border: 3px solid #000; width: 225px;">';
         for ($i = 0; $i < 9; $i++) {
             $HTMLtable .= '<tr>';
             for ($j = 0; $j < 9; $j++) {
-                $HTMLtable .= '<td style="height: 25px; border-right:  ' . 
-                        (($j+1)%3 === 0? '3' : '1') . 
-                        'px solid #000; border-bottom: ' . 
-                        (($i+1)%3 === 0? '3' : '1') . 
+                $HTMLtable .= '<td style="height: 25px; border-right:  ' .
+                        (($j + 1) % 3 === 0 ? '3' : '1') .
+                        'px solid #000; border-bottom: ' .
+                        (($i + 1) % 3 === 0 ? '3' : '1') .
                         'px solid #000; text-align: center">' .
-                (($grid[($i * 9) + $j] !== 0) ? $grid[($i * 9) +$j] : ' ') . '</td>';
+                        (($grid[($i * 9) + $j] !== 0) ? $grid[($i * 9) + $j] : ' ') . '</td>';
             }
             $HTMLtable .= '</tr>';
         }
