@@ -76,21 +76,6 @@ class PDFGenerator extends TCPDF {
         }
     }
 
-    public function renderGrid($grid) {
-        $cellDimensions = array(
-            'width' => 8,
-            'height' => 8
-        );
-        $fill = 0;
-        for ($i = 0; $i < 9; $i++) {
-            for ($j = 0; $j < 9; $j++) {
-                $txt = ($grid[$i * 9 + $j] != 0) ? $grid[$i * 9 + $j] : '';
-                $this->Cell($cellDimensions['width'], $cellDimensions['height'], $txt, 1, 0, 'L', $fill);
-            }
-            $this->Ln();
-        }
-    }
-
     private function gridToHTML($grid) {
         $HTMLtable = '<table style="border-collapse: collapse; border: 3px solid #000; width: 225px;">';
         for ($i = 0; $i < 9; $i++) {

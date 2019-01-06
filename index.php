@@ -10,21 +10,35 @@
             <div id="level-menu">
                 <h1>Choose Your level and PLAY!</h1>             
                 <ul id="level-list">
-                    <li><button type="button" class="level-btn" id="easy">Easy</button></li>
-                    <li><button type="button" class="level-btn" id="medium">Medium</button></li>
-                    <li><button type="button" class="level-btn" id="hard">Hard</button></li>
+                    <li><button type="button" class="level-btn" id="easy" onclick="requestGrid('easy');">Easy</button></li>
+                    <li><button type="button" class="level-btn" id="medium" onclick="requestGrid('medium');">Medium</button></li>
+                    <li><button type="button" class="level-btn" id="hard" onclick="requestGrid('hard');">Hard</button></li>
                 </ul>
             </div>
-            <div id="grid-container" class="hidden">
-                <div id="grid"></div>
-                <ul id="controls" class="hidden">
-                    <li><button type="button" class="grid-control-btn" id='solve'>Solution</button></li>
-                    <li><button type="button" class="grid-control-btn" id='reset'>Reset</button></li>
-                </ul>
+            <div id="main-container" class="hidden">
+                <div id="pdf-config" class="hidden">
+                    <form>
+                        <label>Select Level</label><br/>
+                        <select>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select><br/>
+                        <label>Select the number of puzzles</label><br/>
+                        <input type="text" id="num-Of-grids" pattern="[1-9]{2}" autocomplete="off"/><br/>
+                        <button type="button" id="get-pdf" class="grid-control-btn">Get PDF</button>
+                    </form>
+                </div>
+                <div id="grid" class="hidden">
+                    <div id="table" ></div>
+                    <ul id="controls">
+                        <li><button type="button" class="grid-control-btn" id="solution">Solution</button></li>
+                        <li><button type="button" class="grid-control-btn" id="reset">Reset</button></li>
+                    </ul>
+                </div>
             </div>
             <div id="pdf-generator">
-                <button type="button" id='getpdf' class='grid-control-btn'>Get PDF</button>
-                <h3>Click the button for PDF Download</h3>
+                <h3>Click <button type="button" onclick='displayPDFConfig();'>here</button> for PDF Download</h3>
             </div>
         </div>
         <script src="js/main.js"></script>

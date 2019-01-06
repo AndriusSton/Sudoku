@@ -78,18 +78,26 @@ h1 {
     background-color: rgba(203, 217, 187, 0.9);
 }
 
-#grid-container {
-    display: flex;
-    justify-content: space-around;
+#main-container {
     background-color: #CBD9BB;
 }
 
 #grid {
+    display: flex;
+    justify-content: space-around;
+}
+
+#table {
     flex-basis: 50%;
 }
 
 #controls {
     margin-right: -175px;
+}
+
+#pdf-config {
+    flex-basis: 100%;
+    padding: 3%;
 }
 
 .hidden {
@@ -141,7 +149,7 @@ h3 {
     color: #CBD9BB;
 }
 
-#getpdf {
+#get-pdf {
 
 }
 

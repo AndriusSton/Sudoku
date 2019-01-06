@@ -1,48 +1,37 @@
-// BUTTON LISTENERS
+const request = new XMLHttpRequest();
 
-document.getElementById('easy').addEventListener('click', function () {
-    requestGrid('easy');
-});
-document.getElementById('medium').addEventListener('click', function () {
-    requestGrid('medium');
-});
-document.getElementById('hard').addEventListener('click', function () {
-    requestGrid('hard');
-});
+// RESET BUTTON LISTENER
 document.getElementById('reset').addEventListener('click', function () {
     clear();
     renderGrid(JSON.parse(sessionStorage.getItem('initial'))['grid']);
 });
-document.getElementById('solve').addEventListener('click', function () {
-    var url = 'http://localhost/Sudoku/api/solve.php';
-    var cells = document.getElementsByTagName('td');
-    var grid = new FormData();
-    for (var i = 0; i < cells.length; i++) {
-        if (cells[i].getElementsByTagName('input').length > 0) {
-            grid.append(cells[i].id, 0);
-        } else {
-            grid.append(cells[i].id, cells[i].innerHTML);
-        }
-    }
-    var request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.send(grid);
-    request.onreadystatechange = function () {
-        if (request.readyState === XMLHttpRequest.DONE) {
-            if (request.status >= 200 && request.status < 400) {
-                if (JSON.parse(request.responseText)['grid']) {
-                    clear();
-                    renderGrid(JSON.parse(request.responseText)['grid']);
-                } else if (JSON.parse(request.responseText)['error']) {
-                    console.log(JSON.parse(request.responseText)['error']);
-                } else
-                    console.log('Something went wrong...');
-            } else
-                console.log('Server error...');
-        }
-    };
+
+// SOLVE BUTTON LISTENER
+document.getElementById('solution').addEventListener('click', function () {
+    sendRequest('http://localhost/Sudoku/api/solve.php', 'POST', gatherFormData());
 });
-document.getElementById('getpdf').addEventListener('click', function () {
+
+
+request.onreadystatechange = function () {
+    if (request.readyState === XMLHttpRequest.DONE) {
+        if (request.status >= 200 && request.status < 400) {
+            if (JSON.parse(request.responseText)['grid']) {
+                if (!sessionStorage.getItem('initial')) {
+                    sessionStorage.setItem('initial', request.responseText);
+                }
+                clear();
+                renderGrid(JSON.parse(request.responseText)['grid']);
+                displayGrid();
+            } else if (JSON.parse(request.responseText)['error']) {
+                console.log(JSON.parse(request.responseText)['error']);
+            } else
+                console.log('Something went wrong...');
+        } else
+            console.log('Server error...');
+    }
+}
+
+document.getElementById('get-pdf').addEventListener('click', function () {
     var url = 'http://localhost/Sudoku/api/get_pdf.php';
     //var selector = document.getElementById('level');
     //var level = selector[selector.selectedIndex].value;
@@ -71,32 +60,30 @@ document.getElementById('getpdf').addEventListener('click', function () {
     };
     request.send();
 });
+
 // FUNCTIONS
 
 function requestGrid(level) {
     sessionStorage.clear();
-    var url = 'http://localhost/Sudoku/api/get_puzzle/';
-    var request = new XMLHttpRequest();
-    request.open('GET', url + level, true);
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.onreadystatechange = function () {
-        if (request.readyState === XMLHttpRequest.DONE) {
-            if (request.status >= 200 && request.status < 400) {
-                if (JSON.parse(request.responseText)['grid']) {
-                    sessionStorage.setItem('initial', request.responseText);
-                    clear();
-                    renderGrid(JSON.parse(request.responseText)['grid']);
-                } else if (JSON.parse(request.responseText)['error']) {
-                    console.log(JSON.parse(request.responseText)['error']);
-                } else
-                    console.log("Something went wrong...");
-            } else {
-                console.log("Server error...");
-            }
-        }
-    };
+    sendRequest('http://localhost/Sudoku/api/get_puzzle/' + level, 'GET');
+}
 
-    request.send();
+function sendRequest(url, method, data) {
+    request.open(method, url, true);
+    request.send(data);
+}
+
+function gatherFormData() {
+    var cells = document.getElementsByTagName('td');
+    var grid = new FormData();
+    for (var i = 0; i < cells.length; i++) {
+        if (cells[i].getElementsByTagName('input').length > 0) {
+            grid.append(cells[i].id, 0);
+        } else {
+            grid.append(cells[i].id, cells[i].innerHTML);
+        }
+    }
+    return grid;
 }
 
 function renderGrid(data) {
@@ -113,12 +100,11 @@ function renderGrid(data) {
         HTMLtable += '</tr>';
     }
     HTMLtable += '</table></form>';
-    document.getElementById('grid').insertAdjacentHTML('beforeend', HTMLtable);
-    styling();
+    document.getElementById('table').insertAdjacentHTML('beforeend', HTMLtable);
 }
 
 function clear() {
-    document.getElementById('grid').innerHTML = '';
+    document.getElementById('table').innerHTML = '';
 }
 
 function getGridInputs() {
@@ -136,9 +122,18 @@ function getGridInputs() {
     }
 }
 
-function styling() {
-    document.getElementById('controls').classList.remove('hidden');
-    document.getElementById('grid-container').classList.remove('hidden');
+
+function displayGrid() {
+    document.getElementById('pdf-config').classList.add('hidden');
+    document.getElementById('main-container').classList.remove('hidden');
+    document.getElementById('grid').classList.remove('hidden');
+    document.getElementById('main-container').classList.add('basicTransition');
     document.getElementById('controls').classList.add('controlsTransition');
-    document.getElementById('grid-container').classList.add('basicTransition');
+}
+
+function displayPDFConfig() {
+    document.getElementById('main-container').classList.remove('hidden');
+    document.getElementById('grid').classList.add('hidden');
+    clear();
+    document.getElementById('pdf-config').classList.remove('hidden');
 }

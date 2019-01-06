@@ -20,6 +20,7 @@ if (isset($_POST)) {
         echo json_encode(array('error' => 'Wrong request'));
     }
 } else {
+    
     echo json_encode(array('error' => 'Wrong request'));
 }
 
