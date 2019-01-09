@@ -26,19 +26,19 @@
                         </select><br/>
                         <label>Select the number of puzzles</label><br/>
                         <input type="number" id="num-of-grids" min="1" max="100" autocomplete="off"/><br/>
-                        <button type="button" id="get-pdf" class="grid-control-btn">Get PDF</button>
+                        <button type="button" id="get-pdf-btn" class="grid-control-btn">Get PDF</button>
                     </form>
                 </div>
                 <div id="grid" class="hidden">
                     <div id="table" ></div>
                     <ul id="controls">
-                        <li><button type="button" class="grid-control-btn" id="solution">Solution</button></li>
-                        <li><button type="button" class="grid-control-btn" id="reset">Reset</button></li>
+                        <li><button type="button" class="grid-control-btn" id="solution-btn">Solution</button></li>
+                        <li><button type="button" class="grid-control-btn" id="reset-btn">Reset</button></li>
                     </ul>
                 </div>
             </div>
             <div id="pdf-generator">
-                <h3>Click <button type="button" onclick='displayPDFConfig();'>here</button> for PDF Download</h3>
+                <h3>Click <button type="button" id="pdf-config-btn" onclick='displayPDFConfig();'>HERE</button> for PDF Download</h3>
             </div>
         </div>
         <script src="js/main.js"></script>

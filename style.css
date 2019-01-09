@@ -148,8 +148,15 @@ h3 {
     color: #CBD9BB;
 }
 
-#get-pdf {
-
+#pdf-config-btn {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: Transparent;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 1em;
+    color: #CBD9BB;
+    text-decoration: underline;
 }
 
 /* ----- MEDIAQUERIES -----*/

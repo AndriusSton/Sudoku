@@ -1,30 +1,30 @@
 const request = createXMLHttpRequestObject();
 // RESET BUTTON LISTENER
-document.getElementById('reset').addEventListener('click', function () {
+document.getElementById('reset-btn').addEventListener('click', function () {
     clearGrid();
     renderGrid(JSON.parse(sessionStorage.getItem('initial'))['grid']);
 });
 
 // SOLVE BUTTON LISTENER
-document.getElementById('solution').addEventListener('click', function () {
-    process('http://localhost/Sudoku/api/solve.php', 'POST', gatherGridInputData(), 'Grid');
+document.getElementById('solution-btn').addEventListener('click', function () {
+    process('http://localhost/Sudoku/services/solve.php', 'POST', gatherGridInputData(), 'Grid');
 });
 
 // GET PDF BUTTON LISTENER
-document.getElementById('get-pdf').addEventListener('click', function () {
+document.getElementById('get-pdf-btn').addEventListener('click', function () {
     var formData = new FormData();
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
     var numOfGrids = document.getElementById('num-of-grids').value;
     formData.append('level', level);
     formData.append('numOfGrids', numOfGrids);
-    process('http://localhost/Sudoku/api/get_pdf.php', 'POST', formData, 'PDF');
+    process('http://localhost/Sudoku/services/get_pdf.php', 'POST', formData, 'PDF');
 });
 
 // FUNCTIONS
 function requestGrid(level) {
     sessionStorage.clear();
-    process('http://localhost/Sudoku/api/get_puzzle/' + level, 'GET', null, 'Grid');
+    process('http://localhost/Sudoku/services/get_puzzle/' + level, 'GET', null, 'Grid');
 }
 
 function sendRequest(url, method, data) {
@@ -149,8 +149,6 @@ function handleResponse() {
                         }
                         break;
                 }
-
-
             } catch (err) {
                 console.log(err.toString());
             }
