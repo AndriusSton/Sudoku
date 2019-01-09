@@ -4,13 +4,13 @@ include_once '../classes/Puzzle.php';
 include_once '../classes/Algorithm.php';
 include_once '../classes/PDFGenerator.php';
 
-
-if (isset($_GET['num']) && isset($_GET['level'])) {
-    if (!filter_var($_GET['num'], FILTER_VALIDATE_INT) === false && in_array($_GET['level'], array_keys(SUDOKU_LEVELS))) {
+if (isset($_POST['level']) && isset($_POST['numOfGrids'])) {
+    
+    if (in_array($_POST['level'], array_keys(SUDOKU_LEVELS))) {
         
-        $numOfGrids = $_GET['num'];
-        $level = $_GET['level'];
-        unset($_GET);
+        $numOfGrids = (int)$_POST['numOfGrids'];
+        $level = $_POST['level'];
+        unset($_POST);
         if ($numOfGrids > 0 && $numOfGrids < 101) {
 
             // Instatiate puzzle object

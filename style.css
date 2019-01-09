@@ -66,7 +66,6 @@ h1 {
     border-radius: 5%;
     font-size: 0.9em;
     color: #465F8D;
-
     background-color: rgba(203, 217, 187, 0.7);
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.1s ease 0s;
@@ -184,7 +183,7 @@ td {
 
 
 /* ----- Input Styling ----- */
-input {
+td>input {
     display: block;
     padding-left: 25%;
     margin: 0;
@@ -197,7 +196,6 @@ input {
     background-color:  #f2f3f4;
 }
 /* ----- Input Styling End ----- */
-
 
 /* ----- Block Styling ----- */
 [id='3'], [id='6'], [id='9'], [id='12'], [id='15'], [id='18'], [id='21'], 

@@ -19,13 +19,13 @@
                 <div id="pdf-config" class="hidden">
                     <form>
                         <label>Select Level</label><br/>
-                        <select>
+                        <select id="level">
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
                         </select><br/>
                         <label>Select the number of puzzles</label><br/>
-                        <input type="text" id="num-Of-grids" pattern="[1-9]{2}" autocomplete="off"/><br/>
+                        <input type="number" id="num-of-grids" min="1" max="100" autocomplete="off"/><br/>
                         <button type="button" id="get-pdf" class="grid-control-btn">Get PDF</button>
                     </form>
                 </div>
