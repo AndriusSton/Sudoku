@@ -92,7 +92,7 @@ function createXMLHttpRequestObject() {
         try {
             xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
         } catch (err) {
-            console.log(err.toString());
+            displayError(err.toString() + '. Looks like we do not support Your browser.');
         }
     }
     return xmlHttp;
@@ -103,14 +103,14 @@ function process(url, method, data, requestedObject) {
         try {
             request.open(method, url, true);
             if (requestedObject === 'PDF') {
-                request.responseType = "blob";
+                request.responseType = 'blob';
             } else if (requestedObject === 'Grid') {
-                request.responseType = "text";
+                request.responseType = 'text';
             }
             request.onreadystatechange = handleResponse;
             request.send(data);
         } catch (err) {
-            console.log(err.toString());
+            displayError(err.toString() + '. Please, try later.');
         }
     }
 }
@@ -119,22 +119,19 @@ function handleResponse() {
 
     if (request.readyState === XMLHttpRequest.DONE) {
         if (request.status === 200) {
+            var contentType = request.getResponseHeader('Content-Type');
+            
             try {
-                switch (request.responseType) {
-                    case 'blob':
+                switch (contentType) {
+                    case 'application/pdf':
                         var downloadUrl = window.URL.createObjectURL(this.response);
-                        var a = document.createElement("a");
-                        //a.download = 'sudoku.pdf';
+                        var a = document.createElement('a');
+                        a.download = 'sudoku.pdf';
                         a.href = downloadUrl;
                         document.body.appendChild(a);
                         a.click();
-                        window.open(downloadUrl, 'sudoku.pdf');
-                        // remove `a` following `Save As` dialog, 
-                        // `window` regains `focus`
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(downloadUrl);
                         break;
-                    case 'text':
+                    case 'application/json':
                         if (JSON.parse(request.responseText)['grid']) {
                             if (!sessionStorage.getItem('initial')) {
                                 sessionStorage.setItem('initial', request.responseText);
@@ -142,17 +139,21 @@ function handleResponse() {
                             clearGrid();
                             renderGrid(JSON.parse(request.responseText)['grid']);
                             displayGrid();
-                        } else if (JSON.parse(request.responseText)['error']) {
-                            console.log(JSON.parse(request.responseText)['error']);
                         } else {
-                            console.log('Something went wrong...')
+                            displayError(request.statusText);
                         }
                         break;
                 }
             } catch (err) {
-                console.log(err.toString());
+                displayError(err.toString());
             }
         } else
-            console.log(request.statusText);
+            displayError(request.statusText);
     }
+}
+
+function displayError(message){
+    var alertElement = document.getElementById('alert');
+    document.getElementById('message').innerHTML = message;
+    alertElement.style.display = 'block';
 }

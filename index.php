@@ -15,6 +15,10 @@
                     <li><button type="button" class="level-btn" id="hard" onclick="requestGrid('hard');">Hard</button></li>
                 </ul>
             </div>
+            <div id="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span> 
+                <strong id="message"></strong>
+            </div>
             <div id="main-container" class="hidden">
                 <div id="pdf-config" class="hidden">
                     <form>
