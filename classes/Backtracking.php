@@ -1,17 +1,18 @@
 <?php
 
-/*
+/**
  * Algorithm class provides SUDOKU grid generation method using backtracking
  * algorithm. Each number is selected out of number of available choices at
- * particular cell. If there is nothing to choose from, cell counter gets back
- * to a previous cell which had more than one choice to select from.
+ * particular cell location. If there is nothing to choose from, cell counter 
+ * gets back to a previous cell which had more than one choice to select from.
  *
- * @author Andrius
+ * @author Andrius Stonys
  */
+include_once '../interfaces/Algorithm.php';
 
-class Algorithm {
+class Backtracking implements Algorithm {
     /*
-     * Initial sudoku grid. Empty cell is represented by value zero.
+     * Initial sudoku grid[]. Empty cell is represented by value zero.
      */
 
     const INITIAL_TABLE = array(
@@ -32,8 +33,9 @@ class Algorithm {
     const INITIAL_POSSIBLE_VALUES = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
     /*
-     * Solves a sudoku puzzle and returns a full sudoku grid
-     * 
+     * Solves a sudoku puzzle and returns a full sudoku grid[]
+     * @param Array $puzzle with a size of 81 elements
+     * @return array $solution
      */
 
     public function solve($puzzle) {
@@ -106,8 +108,9 @@ class Algorithm {
     }
 
     /*
-     * Generates a Sudoku grid
-     * 
+     * Generates a Sudoku grid[]. generate() uses solve() method by passing
+     * empty grid (INITIAL_TABLE).
+     * @return array $solution
      */
 
     public function generate() {
@@ -116,7 +119,9 @@ class Algorithm {
 
     /*
      * Calculates possible choices for a cell value
-     * 
+     * @param int $cell
+     * @param array $table
+     * @return array $possible values
      */
 
     private function getPossibleValues($cell, $table) {
@@ -128,7 +133,8 @@ class Algorithm {
 
     /*
      * Returns row number of the cell passed
-     * 
+     * @param int $cell
+     * @return int
      */
 
     private function row($cell) {
@@ -137,7 +143,8 @@ class Algorithm {
 
     /*
      * Returns column number of the cell passed
-     * 
+     * @param int $cell
+     * @return int
      */
 
     private function col($cell) {
@@ -146,12 +153,21 @@ class Algorithm {
 
     /*
      * Returns block number of the cell passed
-     * 
+     * @param int $cell
+     * @return int
      */
 
     private function block($cell) {
         return floor(self::row($cell) / 3) * 3 + floor(self::col($cell) / 3);
     }
+
+    /*
+     * Returns an array of cells in a single row to which a passed $cell belongs
+     * The method is not being used. For debug purpose only.
+     * @param int $cell
+     * @param array $table
+     * @return array $cells
+     */
 
     public function getRowArray($cell, $table) {
         $cells = array();
@@ -162,6 +178,14 @@ class Algorithm {
         return $cells;
     }
 
+    /*
+     * Returns an array of cells in a single column to which a passed $cell belongs
+     * The method is not being used. For debug purpose only.
+     * @param int $cell
+     * @param array $table
+     * @return array $cells
+     */
+
     public function getColArray($cell, $table) {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
@@ -170,6 +194,14 @@ class Algorithm {
         }
         return $cells;
     }
+
+    /*
+     * Returns an array of cells in a single block to which a passed $cell belongs
+     * The method is not being used. For debug purpose only.
+     * @param int $cell
+     * @param array $table
+     * @return array $cells
+     */
 
     public function getBlockArray($cell, $table) {
         $cells = array();

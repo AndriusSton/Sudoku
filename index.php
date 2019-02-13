@@ -7,6 +7,8 @@
     </head>
     <body>
         <div class="container">
+            
+            <!-- NAVIGATION -->
             <div id="level-menu">
                 <h1>Choose Your level and PLAY!</h1>             
                 <ul id="level-list">
@@ -15,10 +17,16 @@
                     <li><button type="button" class="level-btn" id="hard" onclick="requestGrid('hard');">Hard</button></li>
                 </ul>
             </div>
+            <!-- NAVIGATION END -->
+            
+            <!-- ALERT -->
             <div id="alert">
                 <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span> 
                 <strong id="message"></strong>
             </div>
+            <!-- ALERT END -->
+            
+            <!-- MAIN CONTENT -->
             <div id="main-container" class="hidden">
                 <div id="pdf-config" class="hidden">
                     <form>
@@ -44,6 +52,8 @@
             <div id="pdf-generator">
                 <h3>Click <button type="button" id="pdf-config-btn" onclick='displayPDFConfig();'>HERE</button> for PDF Download</h3>
             </div>
+            <!-- MAIN CONTENT END -->
+            
         </div>
         <script src="js/main.js"></script>
     </body>
