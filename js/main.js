@@ -1,4 +1,5 @@
 const request = createXMLHttpRequestObject();
+const hostname = location.protocol + "//" + location.hostname + ((location.port)? ":" +location.port : "");
 
 /*
  * RESET BUTTON LISTENER
@@ -14,7 +15,8 @@ document.getElementById('reset-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('solution-btn').addEventListener('click', function () {
-    process('http://localhost/Sudoku/services/solve.php', 'POST', gatherGridInputData(), 'Grid');
+    var url =  hostname + "/services/solve.php";
+    process(url, 'POST', gatherGridInputData(), 'Grid');
 });
 
 /*
@@ -26,9 +28,10 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
     var numOfGrids = document.getElementById('num-of-grids').value;
+    var url = hostname + "/services/get_pdf.php";
     formData.append('level', level);
     formData.append('numOfGrids', numOfGrids);
-    process('http://localhost/Sudoku/services/get_pdf.php', 'POST', formData, 'PDF');
+    process(url, 'POST', formData, 'PDF');
 });
 
 // ------- FUNCTIONS -------
@@ -143,7 +146,7 @@ function displayError(message) {
  */
 function requestGrid(level) {
     sessionStorage.clear();
-    process('http://localhost/Sudoku/services/get_puzzle/' + level, 'GET', null, 'Grid');
+    process(hostname + '/services/get_puzzle/' + level, 'GET', null, 'Grid');
 }
 
 /*

@@ -4,7 +4,6 @@
  * 
  */
 
-
 header('Access-Control-Allow-Origin: *');
 
 include_once '../classes/Puzzle.php';
@@ -20,6 +19,7 @@ if (sizeof($request) === 4) {
     if (!in_array($request[3], array_keys(SUDOKU_LEVELS))) {
         http_response_code(400);
     }
+    
     header('Content-Type: application/json');
     $puzzle = new Puzzle(new Backtracking());
     $puzzleArray = $puzzle->getPuzzle($request[3]);

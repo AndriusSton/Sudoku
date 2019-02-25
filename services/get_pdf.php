@@ -5,7 +5,8 @@
  * 
  */
 
-// Headers are set in $pdf->Output()
+// Content-type header is set in $pdf->Output()
+header('Access-Control-Allow-Origin: *');
 
 include_once '../classes/Puzzle.php';
 include_once '../classes/Backtracking.php';
