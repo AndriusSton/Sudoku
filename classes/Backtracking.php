@@ -212,4 +212,38 @@ class Backtracking implements Algorithm {
         return $cells;
     }
 
+    public function checkSum($table) {
+        if (array_sum($table) === 405) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getSelectedColumnArray($colIndex, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = $i * 9 + $colIndex;
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+
+    public function getSelectedRowArray($rowIndex, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = $rowIndex * 9 + $i;
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+    
+    public function getSelectedBlockArray($blockIndex, $table){
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = floor($blockIndex / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($blockIndex % 3);
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+
 }

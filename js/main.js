@@ -1,5 +1,5 @@
 const request = createXMLHttpRequestObject();
-const hostname = location.protocol + "//" + location.hostname + ((location.port)? ":" +location.port : "");
+const hostname = location.protocol + "//" + location.hostname + ((location.port) ? ":" + location.port : "");
 
 /*
  * RESET BUTTON LISTENER
@@ -15,9 +15,29 @@ document.getElementById('reset-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('solution-btn').addEventListener('click', function () {
-    var url =  hostname + "/services/solve.php";
-    process(url, 'POST', gatherGridInputData(), 'Grid');
+    var url = hostname + "/services/solve.php";
+    var initial = JSON.parse(sessionStorage.getItem('initial'))['grid'];
+    var gridToSend = new FormData();
+    for(var i = 0; i < initial.length; i++){
+        gridToSend.append(i, initial[i]);
+    }
+    process(url, 'POST', gridToSend, 'Grid');
 });
+
+/*
+ * CHECK BUTTON LISTENER
+ * @returns {undefined}
+ */
+document.getElementById('check-btn').addEventListener('click', function () {
+    var url = hostname + "/services/check.php";
+    var initial = JSON.stringify(JSON.parse(sessionStorage.getItem('initial'))['grid']);
+    var inputs = JSON.stringify(gatherGridInputData());
+    var gridToSend = new FormData();
+    gridToSend.append('initial', initial);
+    gridToSend.append('solution', inputs);
+    process(url, 'POST', gridToSend, 'Grid');
+});
+
 
 /*
  * GET PDF BUTTON LISTENER
@@ -67,7 +87,6 @@ function process(url, method, data, requestedObject) {
     if (request) {
         try {
             request.open(method, url, true);
-
             // switch between PDF and regular grid requests
             if (requestedObject === 'PDF') {
                 request.responseType = 'blob';
@@ -161,8 +180,8 @@ function renderGrid(data) {
         for (var j = 0; j < 9; j++) {
             HTMLtable += '<td id="' + ((i * 9) + j) + '">' +
                     ((data[(i * 9) + j] !== 0) ? data[(i * 9) +
-                            j] : '<input name="' + ((i * 9) + j) +
-                            '" type="text" pattern="[1-9]{1}" autocomplete="off"/>') +
+                            j] : '<input class="cells" id="cell-' + ((i * 9) + j) + '" name="' + ((i * 9) + j) +
+                            '" type="text" pattern="[1-9]{1}" autocomplete="off">') +
                     '</td>';
         }
         HTMLtable += '</tr>';
@@ -184,14 +203,10 @@ function clearGrid() {
  * @returns {FormData|gatherGridInputData.grid}
  */
 function gatherGridInputData() {
-    var cells = document.getElementsByTagName('td');
-    var grid = new FormData();
+    var cells = document.getElementsByClassName('cells');
+    var grid = new Array();
     for (var i = 0; i < cells.length; i++) {
-        if (cells[i].getElementsByTagName('input').length > 0) {
-            grid.append(cells[i].id, 0);
-        } else {
-            grid.append(cells[i].id, cells[i].innerHTML);
-        }
+            grid.push((parseInt(cells[i].value))? parseInt(cells[i].value) : '0');
     }
     return grid;
 }

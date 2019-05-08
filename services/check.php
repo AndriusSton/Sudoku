@@ -1,9 +1,8 @@
 <?php
+
 /**
- * Service for getting the SUDOKU grid solution. A JSON object is sent back.
+ * Service for checking the submitted SUDOKU grid solution.
  */
-
-
 // Headers
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -37,12 +36,21 @@ if (!isset($_POST)) {
 if (!is_array($_POST)) {
     http_response_code(400);
 }
-$grid = $_POST;
+$initial = array_map('intval', json_decode($_POST['initial'], true));
+$userSolution = array_map('intval', json_decode($_POST['solution'], true));
 
 $sudokuSolver = new Backtracking();
 try {
-    $solution = $sudokuSolver->solve($grid);
-    echo json_encode(array('grid' => $solution));
+    $solution = $sudokuSolver->solve($initial);
+    $solvedCells = array_diff_assoc($solution, $initial);
+
+    var_dump(array_sum($solution));
+    var_dump(array_sum($sudokuSolver->getSelectedColumnArray(2, $solution)));
+    var_dump(array_sum($sudokuSolver->getSelectedRowArray(4, $solution)));
+    var_dump(array_sum($sudokuSolver->getSelectedBlockArray(6, $solution)));
+    
+    die();
+    echo json_encode(array('grid' => $solvedCells));
 } catch (Exception $ex) {
     echo json_encode(array('error' => $ex->getMessage()));
 }

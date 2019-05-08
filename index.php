@@ -46,6 +46,7 @@
                     <ul id="controls">
                         <li><button type="button" class="grid-control-btn" id="solution-btn">Solution</button></li>
                         <li><button type="button" class="grid-control-btn" id="reset-btn">Reset</button></li>
+                        <li><button type="button" class="grid-control-btn" id="check-btn">Check</button></li>
                     </ul>
                 </div>
             </div>
