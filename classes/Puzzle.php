@@ -99,4 +99,76 @@ class Puzzle {
         return $removedCells;
     }
 
+    public function check($puzzle, $solution) {
+        if(sizeof($puzzle) != 81){
+            throw new Exception('Checker: 9x9 sudoku is expected');
+        }
+        $solved = $puzzle;
+        $j = 0;
+        for ($i = 0; $i < sizeof($solved); $i++) {
+            if ($solved[$i] === 0) {
+                $solved[$i] = $solution[$j];
+                $j++;
+            }
+        }
+        return self::checkSums($solved);
+    }
+
+    public function getSelectedColumnArray($colIndex, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = $i * 9 + $colIndex;
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+
+    public function getSelectedRowArray($rowIndex, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = $rowIndex * 9 + $i;
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+
+    public function getSelectedBlockArray($blockIndex, $table) {
+        $cells = array();
+        for ($i = 0; $i < 9; $i++) {
+            $index = floor($blockIndex / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($blockIndex % 3);
+            $cells[$index] = $table[$index];
+        }
+        return $cells;
+    }
+
+    public function checkSums($table) {
+
+        if (array_sum($table) != 405) {
+            return false;
+        }
+
+        // check blocks
+        for ($i = 0; $i < (sizeof($table) / 9); $i++) {
+            if (array_sum(self::getSelectedBlockArray($i, $table)) != 45) {
+                return false;
+            }
+        }
+
+        // check columns
+        for ($i = 0; $i < (sizeof($table) / 9); $i++) {
+            if (array_sum(self::getSelectedColumnArray($i, $table)) != 45) {
+                return false;
+            }
+        }
+
+        // check rows
+        for ($i = 0; $i < (sizeof($table) / 9); $i++) {
+            if (array_sum(self::getSelectedRowArray($i, $table)) != 45) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

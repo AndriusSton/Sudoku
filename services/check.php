@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
+include_once '../classes/Puzzle.php';
 include_once '../classes/Backtracking.php';
 
 if (!isset($_POST)) {
@@ -39,18 +40,13 @@ if (!is_array($_POST)) {
 $initial = array_map('intval', json_decode($_POST['initial'], true));
 $userSolution = array_map('intval', json_decode($_POST['solution'], true));
 
-$sudokuSolver = new Backtracking();
+$checker = new Puzzle(new Backtracking());
 try {
-    $solution = $sudokuSolver->solve($initial);
-    $solvedCells = array_diff_assoc($solution, $initial);
-
-    var_dump(array_sum($solution));
-    var_dump(array_sum($sudokuSolver->getSelectedColumnArray(2, $solution)));
-    var_dump(array_sum($sudokuSolver->getSelectedRowArray(4, $solution)));
-    var_dump(array_sum($sudokuSolver->getSelectedBlockArray(6, $solution)));
-    
-    die();
-    echo json_encode(array('grid' => $solvedCells));
+    if ($checker->check($initial, $userSolution)) {
+        echo json_encode(array('message' => 'Congratulations! :)'));
+    } else {
+        echo json_encode(array('message' => 'You\'ve got error...  :('));
+    }
 } catch (Exception $ex) {
     echo json_encode(array('error' => $ex->getMessage()));
 }

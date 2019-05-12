@@ -18,7 +18,7 @@ document.getElementById('solution-btn').addEventListener('click', function () {
     var url = hostname + "/services/solve.php";
     var initial = JSON.parse(sessionStorage.getItem('initial'))['grid'];
     var gridToSend = new FormData();
-    for(var i = 0; i < initial.length; i++){
+    for (var i = 0; i < initial.length; i++) {
         gridToSend.append(i, initial[i]);
     }
     process(url, 'POST', gridToSend, 'Grid');
@@ -31,11 +31,17 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = hostname + "/services/check.php";
     var initial = JSON.stringify(JSON.parse(sessionStorage.getItem('initial'))['grid']);
-    var inputs = JSON.stringify(gatherGridInputData());
-    var gridToSend = new FormData();
-    gridToSend.append('initial', initial);
-    gridToSend.append('solution', inputs);
-    process(url, 'POST', gridToSend, 'Grid');
+    var inputs = gatherGridInputData()? gatherGridInputData() : null;
+    
+    if (inputs) {
+        var gridToSend = new FormData();
+        gridToSend.append('initial', initial);
+        gridToSend.append('solution', JSON.stringify(inputs));
+        process(url, 'POST', gridToSend, 'Grid');
+    } else {
+        displayError('Nothing to solve...');
+    }
+
 });
 
 
@@ -123,7 +129,9 @@ function handleResponse() {
                         a.click();
                         break;
                     case 'application/json':
-                        if (JSON.parse(request.responseText)['grid']) {
+
+                        var json_response = JSON.parse(request.responseText);
+                        if (json_response['grid']) {
                             // sessionStorage must be cleared on requestGrid() call
                             if (!sessionStorage.getItem('initial')) {
                                 // save the new grid to sessionStorage
@@ -134,8 +142,10 @@ function handleResponse() {
                             // render new grid as HTML table
                             renderGrid(JSON.parse(request.responseText)['grid']);
                             displayGrid();
-                        } else {
-                            displayError(request.statusText);
+                        } else if (json_response['message']) {
+                            displayError(json_response['message']);
+                        } else if (json_response['error']) {
+                            displayError(json_response['error']);
                         }
                         break;
                 }
@@ -204,11 +214,15 @@ function clearGrid() {
  */
 function gatherGridInputData() {
     var cells = document.getElementsByClassName('cells');
-    var grid = new Array();
-    for (var i = 0; i < cells.length; i++) {
-            grid.push((parseInt(cells[i].value))? parseInt(cells[i].value) : '0');
+    if (cells.length !== 0) {
+        var grid = new Array();
+        for (var i = 0; i < cells.length; i++) {
+            grid.push((parseInt(cells[i].value)) ? parseInt(cells[i].value) : '0');
+        }
+        return grid;
     }
-    return grid;
+    
+    return false;
 }
 
 // TODO: make a single function for switching between grid, pdf-config and 
