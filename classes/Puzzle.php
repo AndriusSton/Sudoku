@@ -99,20 +99,36 @@ class Puzzle {
         return $removedCells;
     }
 
-    public function check($puzzle, $solution) {
+    /*
+     * Aligns initial puzzle array with user solution array
+     * Returns combined array
+     * @param array $puzzle
+     * @param array $solution
+     * @return array $solved
+     */
+    public function align($puzzle, $solution) {
         if(sizeof($puzzle) != 81){
             throw new Exception('Checker: 9x9 sudoku is expected');
         }
-        $solved = $puzzle;
+        $aligned = array();
         $j = 0;
-        for ($i = 0; $i < sizeof($solved); $i++) {
-            if ($solved[$i] === 0) {
-                $solved[$i] = $solution[$j];
+        for ($i = 0; $i < sizeof($puzzle); $i++) {
+            if ($puzzle[$i] === 0) {
+                    $aligned[$i] = $solution[$j];      
                 $j++;
             }
         }
-        return self::checkSums($solved);
+        return $aligned;
     }
+    
+    public function check($puzzle, $solution) {
+        $solved = array_diff_assoc($this->algorithm->solve($puzzle), $puzzle);
+        $aligned = self::align($puzzle, $solution);
+        $dif = array_keys(array_diff_assoc($solved, $aligned));
+        //var_dump($dif);
+        return $dif;
+    }
+    
 
     public function getSelectedColumnArray($colIndex, $table) {
         $cells = array();
@@ -141,34 +157,54 @@ class Puzzle {
         return $cells;
     }
 
+    
+    
     public function checkSums($table) {
 
-        if (array_sum($table) != 405) {
-            return false;
-        }
+//        if (array_sum($table) != 405) {
+//            return false;
+//        }
 
         // check blocks
+        echo 'BLOCKS: ';
         for ($i = 0; $i < (sizeof($table) / 9); $i++) {
             if (array_sum(self::getSelectedBlockArray($i, $table)) != 45) {
-                return false;
+                //return false;
+                // TODO: analyze the block/ get duplicates
+                echo 'Block no.: ' . $i;
+                var_dump(self::getDuplicates(self::getSelectedBlockArray($i, $table)));
+                
             }
         }
 
         // check columns
+        echo 'COLUMNS: ';
         for ($i = 0; $i < (sizeof($table) / 9); $i++) {
             if (array_sum(self::getSelectedColumnArray($i, $table)) != 45) {
-                return false;
+                //return false;
+                // TODO: analyze the column/ get duplicates
+                echo 'Column no.: ' . $i;
+                var_dump(self::getDuplicates(self::getSelectedColumnArray($i, $table)));
             }
         }
 
         // check rows
+        echo 'ROWS: ';
         for ($i = 0; $i < (sizeof($table) / 9); $i++) {
             if (array_sum(self::getSelectedRowArray($i, $table)) != 45) {
-                return false;
+                //return false;
+                // TODO: analyze the row/ get duplicates
+                echo 'Row no.: ' . $i;
+                var_dump(self::getDuplicates(self::getSelectedRowArray($i, $table)));
             }
         }
 
         return true;
+    }
+    
+    public function getDuplicates($array){
+        $unique = array_unique($array);
+        return array_diff_assoc($array, $unique);
     }
 
 }

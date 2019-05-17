@@ -39,7 +39,7 @@ document.getElementById('check-btn').addEventListener('click', function () {
         gridToSend.append('solution', JSON.stringify(inputs));
         process(url, 'POST', gridToSend, 'Grid');
     } else {
-        displayError('Nothing to solve...');
+        displayError('Nothing to solve.');
     }
 
 });
@@ -142,7 +142,9 @@ function handleResponse() {
                             // render new grid as HTML table
                             renderGrid(JSON.parse(request.responseText)['grid']);
                             displayGrid();
-                        } else if (json_response['message']) {
+                        } else if(json_response['wrong_cells']){
+                            displayWrongCells(json_response['wrong_cells']);
+                        } else if(json_response['message']) {
                             displayError(json_response['message']);
                         } else if (json_response['error']) {
                             displayError(json_response['error']);
@@ -166,6 +168,12 @@ function displayError(message) {
     var alertElement = document.getElementById('alert');
     document.getElementById('message').innerHTML = message;
     alertElement.style.display = 'block';
+}
+
+function displayWrongCells(wrongCells){
+    for(var i = 0; i < wrongCells.length; i++){
+        document.getElementById(wrongCells[i]).classList.add('wrong');
+    }
 }
 
 /*

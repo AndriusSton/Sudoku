@@ -42,10 +42,12 @@ $userSolution = array_map('intval', json_decode($_POST['solution'], true));
 
 $checker = new Puzzle(new Backtracking());
 try {
-    if ($checker->check($initial, $userSolution)) {
-        echo json_encode(array('message' => 'Congratulations! :)'));
+    $solved = $checker->check($initial, $userSolution);
+
+    if (!empty($solved)) {
+        echo json_encode(array('wrong_cells' => $solved));
     } else {
-        echo json_encode(array('message' => 'You\'ve got error...  :('));
+        echo json_encode(array('message' => 'Congratulations! :)'));
     }
 } catch (Exception $ex) {
     echo json_encode(array('error' => $ex->getMessage()));
