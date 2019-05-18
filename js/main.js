@@ -31,8 +31,8 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = hostname + "/services/check.php";
     var initial = JSON.stringify(JSON.parse(sessionStorage.getItem('initial'))['grid']);
-    var inputs = gatherGridInputData()? gatherGridInputData() : null;
-    
+    var inputs = gatherGridInputs() ? gatherGridInputs() : null;
+
     if (inputs) {
         var gridToSend = new FormData();
         gridToSend.append('initial', initial);
@@ -142,9 +142,9 @@ function handleResponse() {
                             // render new grid as HTML table
                             renderGrid(JSON.parse(request.responseText)['grid']);
                             displayGrid();
-                        } else if(json_response['wrong_cells']){
+                        } else if (json_response['wrong_cells']) {
                             displayWrongCells(json_response['wrong_cells']);
-                        } else if(json_response['message']) {
+                        } else if (json_response['message']) {
                             displayError(json_response['message']);
                         } else if (json_response['error']) {
                             displayError(json_response['error']);
@@ -170,9 +170,22 @@ function displayError(message) {
     alertElement.style.display = 'block';
 }
 
-function displayWrongCells(wrongCells){
-    for(var i = 0; i < wrongCells.length; i++){
-        document.getElementById(wrongCells[i]).classList.add('wrong');
+function displayWrongCells(wrongCells) {
+    var cells = document.getElementsByClassName('cell wrong');
+    if (cells.length !== 0) {
+        removeWrongClass(cells);
+    }
+    for (var i = 0; i < wrongCells.length; i++) {
+        var cell = document.getElementById(wrongCells[i]);
+        cell.classList.add('wrong');
+        //document.getElementById(wrongCells[i]).classList.add('wrong');
+    }
+}
+
+function removeWrongClass(cells) {
+    cells[0].classList.remove('wrong');
+    if (cells[0]) {
+        removeWrongClass(cells);
     }
 }
 
@@ -194,12 +207,21 @@ function requestGrid(level) {
 function renderGrid(data) {
     var HTMLtable = '<form id="sudoku"><table>';
     for (var i = 0; i < 9; i++) {
-        HTMLtable += '<tr id="' + i + '">';
+        HTMLtable += '<tr>';
         for (var j = 0; j < 9; j++) {
-            HTMLtable += '<td id="' + ((i * 9) + j) + '">' +
-                    ((data[(i * 9) + j] !== 0) ? data[(i * 9) +
-                            j] : '<input class="cells" id="cell-' + ((i * 9) + j) + '" name="' + ((i * 9) + j) +
-                            '" type="text" pattern="[1-9]{1}" autocomplete="off">') +
+            var id = ((i * 9) + j);
+            var borderClass = 'cell';
+
+            // add thicker vertical lines
+            borderClass += (id % 3 === 0) ? ' border-left' : '';
+            borderClass += (id % 9 === 8) ? ' border-right' : '';
+
+            //add thicker horizontal lines
+            borderClass += (id < 9) ? ' border-top' : '';
+            borderClass += (id % 27 >= 18) ? ' border-bottom' : '';
+
+            HTMLtable += '<td class="' + borderClass + '" id="' + id + '">' +
+                    ((data[id] !== 0) ? data[id] : '<input class="inputs" type="text" pattern="[1-9]{1}" autocomplete="off">') +
                     '</td>';
         }
         HTMLtable += '</tr>';
@@ -220,8 +242,8 @@ function clearGrid() {
  * Gathers inputs from grid < td > tags
  * @returns {FormData|gatherGridInputData.grid}
  */
-function gatherGridInputData() {
-    var cells = document.getElementsByClassName('cells');
+function gatherGridInputs() {
+    var cells = document.getElementsByClassName('inputs');
     if (cells.length !== 0) {
         var grid = new Array();
         for (var i = 0; i < cells.length; i++) {
@@ -229,7 +251,6 @@ function gatherGridInputData() {
         }
         return grid;
     }
-    
     return false;
 }
 
