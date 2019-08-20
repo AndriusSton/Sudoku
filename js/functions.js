@@ -1,6 +1,7 @@
 const request = createXMLHttpRequestObject();
 const hostname = location.protocol + "//" + location.hostname + ((location.port) ? ":" + location.port : "");
 
+
 /*
  * RESET BUTTON LISTENER
  * @returns {undefined}
@@ -9,6 +10,34 @@ document.getElementById('reset-btn').addEventListener('click', function () {
     clearGrid();
     renderGrid(JSON.parse(sessionStorage.getItem('initial'))['grid']);
 });
+
+
+function increment(id) {
+    console.log('Increment', id);
+    var btn = document.getElementById(id);
+    AppGlobals.grid[id] = (AppGlobals.grid[id] === 9) ? 1 : ++AppGlobals.grid[id];
+    btn.innerHTML = AppGlobals.grid[id];
+    event.preventDefault()
+}
+
+function fetchGrid(level) {
+    sessionStorage.clear();
+    fetch(hostname + '/services/get_puzzle/' + level).then((response) => {
+        return response.json();
+    }).then((result) => {
+        AppGlobals.grid = result.grid;
+        // sessionStorage must be cleared on requestGrid() call
+        if (!sessionStorage.getItem('initial')) {
+            // save the new grid to sessionStorage
+            sessionStorage.setItem('initial', AppGlobals.grid);
+        }
+    }).then(() => {
+        // clear the HTML
+        clearGrid();
+        renderGrid(AppGlobals.grid);
+        displayGrid();
+    });
+}
 
 /*
  * SOLVE BUTTON LISTENER
@@ -22,7 +51,8 @@ document.getElementById('solution-btn').addEventListener('click', function () {
         gridToSend.append(i, initial[i]);
     }
     process(url, 'POST', gridToSend, 'Grid');
-});
+}
+);
 
 /*
  * CHECK BUTTON LISTENER
@@ -39,11 +69,10 @@ document.getElementById('check-btn').addEventListener('click', function () {
         gridToSend.append('solution', JSON.stringify(inputs));
         process(url, 'POST', gridToSend, 'Grid');
     } else {
-        displayError('Nothing to solve.');
+        displayAlert('error', 'Nothing to solve.');
     }
 
 });
-
 
 /*
  * GET PDF BUTTON LISTENER
@@ -74,7 +103,7 @@ function createXMLHttpRequestObject() {
         try {
             xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
         } catch (err) {
-            displayError(err.toString() + '. Looks like we do not support Your browser.');
+            displayAlert('error', err.toString() + '. Looks like we do not support Your browser.');
         }
     }
     return xmlHttp;
@@ -102,7 +131,7 @@ function process(url, method, data, requestedObject) {
             request.onreadystatechange = handleResponse;
             request.send(data);
         } catch (err) {
-            displayError(err.toString() + '. Please, try later.');
+            displayAlert('error', err.toString() + '. Please, try later.');
         }
     }
 }
@@ -140,22 +169,23 @@ function handleResponse() {
                             // clear the HTML
                             clearGrid();
                             // render new grid as HTML table
-                            renderGrid(JSON.parse(request.responseText)['grid']);
+                            var grid = convertToArrayOfObjects(JSON.parse(request.responseText)['grid']);
+                            renderGrid(grid);
                             displayGrid();
                         } else if (json_response['wrong_cells']) {
                             displayWrongCells(json_response['wrong_cells']);
                         } else if (json_response['message']) {
-                            displayError(json_response['message']);
+                            displayAlert('congrats', json_response['message']);
                         } else if (json_response['error']) {
-                            displayError(json_response['error']);
+                            displayAlert('error', json_response['error']);
                         }
                         break;
                 }
             } catch (err) {
-                displayError(err.toString());
+                displayAlert('error', err.toString());
             }
         } else
-            displayError(request.statusText);
+            displayAlert('error', request.statusText);
     }
 }
 
@@ -164,9 +194,21 @@ function handleResponse() {
  * @param {string} message
  * @returns {undefined}
  */
-function displayError(message) {
+function displayAlert(type, msg) {
     var alertElement = document.getElementById('alert');
-    document.getElementById('message').innerHTML = message;
+    var msgDisplayClass = '';
+    switch (type) {
+        case 'error':
+            msgDisplayClass = 'error-msg';
+            break;
+        case 'congrats':
+            msgDisplayClass = 'congrats-msg';
+            break;
+        default:
+            msgDisplayClass = 'default-msg';
+    }
+    alertElement.classList.add(msgDisplayClass);
+    document.getElementById('message').innerHTML = msg;
     alertElement.style.display = 'block';
 }
 
@@ -178,7 +220,6 @@ function displayWrongCells(wrongCells) {
     for (var i = 0; i < wrongCells.length; i++) {
         var cell = document.getElementById(wrongCells[i]);
         cell.classList.add('wrong');
-        //document.getElementById(wrongCells[i]).classList.add('wrong');
     }
 }
 
@@ -209,7 +250,7 @@ function renderGrid(data) {
     for (var i = 0; i < 9; i++) {
         HTMLtable += '<tr>';
         for (var j = 0; j < 9; j++) {
-            var id = ((i * 9) + j);
+            var id = (i * 9 + j);
             var borderClass = 'cell';
 
             // add thicker vertical lines
@@ -219,10 +260,10 @@ function renderGrid(data) {
             //add thicker horizontal lines
             borderClass += (id < 9) ? ' border-top' : '';
             borderClass += (id % 27 >= 18) ? ' border-bottom' : '';
-
-            HTMLtable += '<td class="' + borderClass + '" id="' + id + '">' +
-                    ((data[id] !== 0) ? data[id] : '<input class="inputs" type="text" pattern="[1-9]{1}" autocomplete="off">') +
-                    '</td>';
+            HTMLtable += '<td class="' + borderClass + '">' +
+                    ((data[id] !== 0) ? data[id] :
+                            '<button class="click" id="' + id + '" onclick="increment(this.id)">') +
+                    '</button></td>';
         }
         HTMLtable += '</tr>';
     }
@@ -280,3 +321,27 @@ function displayPDFConfig() {
     document.getElementById('pdf-config').classList.remove('hidden');
 }
 
+
+function convertToArrayOfObjects(array) {
+
+    let cellEntry = ['id', 'value', 'clickable'],
+            output = [],
+            cellObj = {},
+            rowObj = {},
+            rowCells = [];
+    for (let i = 0; i < 9; i++) {
+        rowObj = {};
+        rowCells = [];
+        for (let j = 0; j < 9; j++) {
+            cellObj = {};
+            cellObj[cellEntry[0]] = ((i * 9) + j);
+            cellObj[cellEntry[1]] = array[(i * 9) + j];
+            cellObj[cellEntry[2]] = (array[(i * 9) + j] === 0) ? true : false;
+            rowCells.push(cellObj);
+        }
+        rowObj['id'] = i;
+        rowObj['value'] = rowCells;
+        output.push(rowObj);
+    }
+    return output;
+}

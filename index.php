@@ -7,25 +7,26 @@
     </head>
     <body>
         <div class="container">
-            
+
             <!-- NAVIGATION -->
             <div id="level-menu">
                 <h1>Choose Your level and PLAY!</h1>             
                 <ul id="level-list">
-                    <li><button type="button" class="level-btn" id="easy" onclick="requestGrid('easy');">Easy</button></li>
-                    <li><button type="button" class="level-btn" id="medium" onclick="requestGrid('medium');">Medium</button></li>
-                    <li><button type="button" class="level-btn" id="hard" onclick="requestGrid('hard');">Hard</button></li>
+                    <li><button type="button" class="level-btn" id="easy" onclick="fetchGrid('easy');">Easy</button></li>
+                    <li><button type="button" class="level-btn" id="medium" onclick="fetchGrid('medium');">Medium</button></li>
+                    <li><button type="button" class="level-btn" id="hard" onclick="fetchGrid('hard');">Hard</button></li>
                 </ul>
             </div>
             <!-- NAVIGATION END -->
-            
+
             <!-- ALERT -->
             <div id="alert">
                 <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span> 
                 <strong id="message"></strong>
             </div>
+
             <!-- ALERT END -->
-            
+
             <!-- MAIN CONTENT -->
             <div id="main-container" class="hidden">
                 <div id="pdf-config" class="hidden">
@@ -54,8 +55,9 @@
                 <h3>Click <button type="button" id="pdf-config-btn" onclick='displayPDFConfig();'>HERE</button> for PDF Download</h3>
             </div>
             <!-- MAIN CONTENT END -->
-            
+
         </div>
-        <script src="js/main.js"></script>
+        <script src="js/functions.js"></script>
+        <script src="js/script.js"></script>
     </body>
 </html>

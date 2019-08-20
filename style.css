@@ -162,8 +162,21 @@ h3 {
 #alert {
     display: none;
     padding: 20px;
-    background-color: #f44336;
-    color: white;
+}
+
+.error-msg {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+
+.congrats-msg {
+    color: #270;
+    background-color: #DFF2BF;
+}
+
+.default-msg {
+    color: #9F6000;
+    background-color: #FEEFB3;
 }
 
 .closebtn {
@@ -179,24 +192,6 @@ h3 {
 
 .closebtn:hover {
     color: black;
-}
-
-/* ----- MEDIAQUERIES -----*/
-/* start of desktop styles */
-
-@media screen and (max-width: 991px) {
-    /* start of large tablet styles */
-
-}
-
-@media screen and (max-width: 767px) {
-    /* start of medium tablet styles */
-
-}
-
-@media screen and (max-width: 479px) {
-    /* start of phone styles */
-
 }
 
 /* ----- Grid Styling ----- */
@@ -216,7 +211,7 @@ h3 {
 
 
 /* ----- Input Styling ----- */
-.cell>input {
+.inputs {
     display: block;
     padding-left: 20%;
     margin: 0;
@@ -246,3 +241,36 @@ h3 {
 .border-top {
     border-top: solid medium
 }
+
+/* ----- Borders End ----- */
+
+.click {
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    height: 25px;
+    width: 25px;
+    background-color: #f2f3f4;
+}
+
+/* ----- MEDIAQUERIES -----*/
+/* start of desktop styles */
+
+@media screen and (max-width: 991px) {
+    /* start of large tablet styles */
+
+}
+
+@media screen and (max-width: 767px) {
+    /* start of medium tablet styles */
+
+}
+
+@media screen and (max-width: 479px) {
+    /* start of phone styles */
+
+}
+
+
