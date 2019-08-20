@@ -8,16 +8,15 @@ const hostname = location.protocol + "//" + location.hostname + ((location.port)
  */
 document.getElementById('reset-btn').addEventListener('click', function () {
     clearGrid();
-    renderGrid(JSON.parse(sessionStorage.getItem('initial'))['grid']);
+    renderGrid(JSON.parse(sessionStorage.getItem('initial')));
 });
 
 
 function increment(id) {
-    console.log('Increment', id);
     var btn = document.getElementById(id);
     AppGlobals.grid[id] = (AppGlobals.grid[id] === 9) ? 1 : ++AppGlobals.grid[id];
     btn.innerHTML = AppGlobals.grid[id];
-    event.preventDefault()
+    event.preventDefault();
 }
 
 function fetchGrid(level) {
@@ -29,7 +28,7 @@ function fetchGrid(level) {
         // sessionStorage must be cleared on requestGrid() call
         if (!sessionStorage.getItem('initial')) {
             // save the new grid to sessionStorage
-            sessionStorage.setItem('initial', AppGlobals.grid);
+            sessionStorage.setItem('initial', JSON.stringify(AppGlobals.grid));
         }
     }).then(() => {
         // clear the HTML
