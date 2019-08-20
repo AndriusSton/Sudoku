@@ -1,16 +1,4 @@
-const request = createXMLHttpRequestObject();
-const hostname = location.protocol + "//" + location.hostname + ((location.port) ? ":" + location.port : "");
-
-
-/*
- * RESET BUTTON LISTENER
- * @returns {undefined}
- */
-document.getElementById('reset-btn').addEventListener('click', function () {
-    clearGrid();
-    renderGrid(JSON.parse(sessionStorage.getItem('initial')));
-});
-
+// ------- FUNCTIONS -------
 
 function increment(id) {
     var btn = document.getElementById(id);
@@ -21,11 +9,11 @@ function increment(id) {
 
 function fetchGrid(level) {
     sessionStorage.clear();
-    fetch(hostname + '/services/get_puzzle/' + level).then((response) => {
+    fetch(AppGlobals.hostname + '/services/get_puzzle/' + level).then((response) => {
         return response.json();
     }).then((result) => {
         AppGlobals.grid = result.grid;
-        // sessionStorage must be cleared on requestGrid() call
+        // sessionStorage must be cleared on new grid request
         if (!sessionStorage.getItem('initial')) {
             // save the new grid to sessionStorage
             sessionStorage.setItem('initial', JSON.stringify(AppGlobals.grid));
@@ -37,58 +25,6 @@ function fetchGrid(level) {
         displayGrid();
     });
 }
-
-/*
- * SOLVE BUTTON LISTENER
- * @returns {undefined}
- */
-document.getElementById('solution-btn').addEventListener('click', function () {
-    var url = hostname + "/services/solve.php";
-    var initial = JSON.parse(sessionStorage.getItem('initial'))['grid'];
-    var gridToSend = new FormData();
-    for (var i = 0; i < initial.length; i++) {
-        gridToSend.append(i, initial[i]);
-    }
-    process(url, 'POST', gridToSend, 'Grid');
-}
-);
-
-/*
- * CHECK BUTTON LISTENER
- * @returns {undefined}
- */
-document.getElementById('check-btn').addEventListener('click', function () {
-    var url = hostname + "/services/check.php";
-    var initial = JSON.stringify(JSON.parse(sessionStorage.getItem('initial'))['grid']);
-    var inputs = gatherGridInputs() ? gatherGridInputs() : null;
-
-    if (inputs) {
-        var gridToSend = new FormData();
-        gridToSend.append('initial', initial);
-        gridToSend.append('solution', JSON.stringify(inputs));
-        process(url, 'POST', gridToSend, 'Grid');
-    } else {
-        displayAlert('error', 'Nothing to solve.');
-    }
-
-});
-
-/*
- * GET PDF BUTTON LISTENER
- * @returns {undefined}
- */
-document.getElementById('get-pdf-btn').addEventListener('click', function () {
-    var formData = new FormData();
-    var selector = document.getElementById('level');
-    var level = selector[selector.selectedIndex].value;
-    var numOfGrids = document.getElementById('num-of-grids').value;
-    var url = hostname + "/services/get_pdf.php";
-    formData.append('level', level);
-    formData.append('numOfGrids', numOfGrids);
-    process(url, 'POST', formData, 'PDF');
-});
-
-// ------- FUNCTIONS -------
 
 /*
  * XMLHttpRequest object creation in a factory-like wrapper
@@ -118,17 +54,17 @@ function createXMLHttpRequestObject() {
  */
 function process(url, method, data, requestedObject) {
     // If request object was created, send it
-    if (request) {
+    if (AppGlobals.request) {
         try {
-            request.open(method, url, true);
+            AppGlobals.request.open(method, url, true);
             // switch between PDF and regular grid requests
             if (requestedObject === 'PDF') {
-                request.responseType = 'blob';
+                AppGlobals.request.responseType = 'blob';
             } else if (requestedObject === 'Grid') {
-                request.responseType = 'text';
+                AppGlobals.request.responseType = 'text';
             }
-            request.onreadystatechange = handleResponse;
-            request.send(data);
+            AppGlobals.request.onreadystatechange = handleResponse;
+            AppGlobals.request.send(data);
         } catch (err) {
             displayAlert('error', err.toString() + '. Please, try later.');
         }
@@ -141,9 +77,9 @@ function process(url, method, data, requestedObject) {
  */
 function handleResponse() {
 
-    if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-            var contentType = request.getResponseHeader('Content-Type');
+    if (AppGlobals.request.readyState === XMLHttpRequest.DONE) {
+        if (AppGlobals.request.status === 200) {
+            var contentType = AppGlobals.request.getResponseHeader('Content-Type');
             // switch between response content types
             try {
                 switch (contentType) {
@@ -157,19 +93,17 @@ function handleResponse() {
                         a.click();
                         break;
                     case 'application/json':
-
-                        var json_response = JSON.parse(request.responseText);
+                        var json_response = JSON.parse(AppGlobals.request.responseText);
                         if (json_response['grid']) {
                             // sessionStorage must be cleared on requestGrid() call
                             if (!sessionStorage.getItem('initial')) {
                                 // save the new grid to sessionStorage
-                                sessionStorage.setItem('initial', request.responseText);
+                                sessionStorage.setItem('initial', AppGlobals.request.responseText);
                             }
                             // clear the HTML
                             clearGrid();
                             // render new grid as HTML table
-                            var grid = convertToArrayOfObjects(JSON.parse(request.responseText)['grid']);
-                            renderGrid(grid);
+                            renderGrid(json_response['grid']);
                             displayGrid();
                         } else if (json_response['wrong_cells']) {
                             displayWrongCells(json_response['wrong_cells']);
@@ -184,7 +118,7 @@ function handleResponse() {
                 displayAlert('error', err.toString());
             }
         } else
-            displayAlert('error', request.statusText);
+            displayAlert('error', AppGlobals.request.statusText);
     }
 }
 
