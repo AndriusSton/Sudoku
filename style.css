@@ -196,6 +196,7 @@ h3 {
 
 /* ----- Grid Styling ----- */
 .cell {
+    padding: 0;
     height: 25px;
     width: 25px;
     text-align: center;
@@ -210,19 +211,6 @@ h3 {
 /* ----- Grid Styling End -----  */
 
 
-/* ----- Input Styling ----- */
-.inputs {
-    display: block;
-    padding-left: 20%;
-    margin: 0;
-    border: 0;
-    height: 90%;
-    width: 75%;
-    color: darkmagenta;
-    font-style: italic;
-    font-size: 1.3em;
-    background-color:  #f2f3f4;
-}
 /* ----- Input Styling End ----- */
 
 /* ---- Borders ---- */
@@ -246,12 +234,13 @@ h3 {
 
 .click {
     padding: 0;
+    margin: 0;
     border: none;
     font: inherit;
     color: inherit;
     background-color: transparent;
-    height: 25px;
-    width: 25px;
+    height: 99%;
+    width: 99%;
     background-color: #f2f3f4;
 }
 

@@ -164,16 +164,6 @@ function removeWrongClass(cells) {
 }
 
 /*
- * Clears sessionStorage and forms request url for new grid with a selected level
- * @param {string} level
- * @returns {undefined}
- */
-function requestGrid(level) {
-    sessionStorage.clear();
-    process(hostname + '/services/get_puzzle/' + level, 'GET', null, 'Grid');
-}
-
-/*
  * Renders grid[] as HTML table
  * @param {Array} data
  * @returns {undefined}
@@ -196,7 +186,7 @@ function renderGrid(data) {
             HTMLtable += '<td class="' + borderClass + '">' +
                     ((data[id] !== 0) ? data[id] :
                             '<button class="click" id="' + id + '" onclick="increment(this.id)">') +
-                    '</button></td>';
+                    '&nbsp;</button></td>';
         }
         HTMLtable += '</tr>';
     }
@@ -254,27 +244,3 @@ function displayPDFConfig() {
     document.getElementById('pdf-config').classList.remove('hidden');
 }
 
-
-function convertToArrayOfObjects(array) {
-
-    let cellEntry = ['id', 'value', 'clickable'],
-            output = [],
-            cellObj = {},
-            rowObj = {},
-            rowCells = [];
-    for (let i = 0; i < 9; i++) {
-        rowObj = {};
-        rowCells = [];
-        for (let j = 0; j < 9; j++) {
-            cellObj = {};
-            cellObj[cellEntry[0]] = ((i * 9) + j);
-            cellObj[cellEntry[1]] = array[(i * 9) + j];
-            cellObj[cellEntry[2]] = (array[(i * 9) + j] === 0) ? true : false;
-            rowCells.push(cellObj);
-        }
-        rowObj['id'] = i;
-        rowObj['value'] = rowCells;
-        output.push(rowObj);
-    }
-    return output;
-}
