@@ -39,12 +39,12 @@ document.getElementById('solution-btn').addEventListener('click', function () {
  */
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = AppGlobals.hostname + "/services/check.php";
-    var initial = JSON.stringify(JSON.parse(sessionStorage.getItem('initial')));
-    var inputs = gatherGridInputs() ? gatherGridInputs() : null;
+    var initial = JSON.parse(sessionStorage.getItem('initial'));
+    var inputs = fetchInputs(initial, AppGlobals.grid);
 
     if (inputs) {
         var gridToSend = new FormData();
-        gridToSend.append('initial', initial);
+        gridToSend.append('initial', JSON.stringify(initial));
         gridToSend.append('solution', JSON.stringify(inputs));
         process(url, 'POST', gridToSend, 'Grid');
     } else {

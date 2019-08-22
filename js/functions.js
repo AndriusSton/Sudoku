@@ -1,5 +1,18 @@
 // ------- FUNCTIONS -------
 
+function fetchInputs(initial, solved){
+    var result = solved.map((item, index) => {
+        if(item === 0){
+            return item;
+        } else {
+            return ((item - initial[index])=== 0) ? false : item - initial[index];
+        }
+    }).filter( (val) =>{
+        return val !== false;
+    });
+    return result;
+}
+
 function increment(id) {
     var btn = document.getElementById(id);
     AppGlobals.grid[id] = (AppGlobals.grid[id] === 9) ? 1 : ++AppGlobals.grid[id];
@@ -146,7 +159,7 @@ function displayAlert(type, msg) {
 }
 
 function displayWrongCells(wrongCells) {
-    var cells = document.getElementsByClassName('cell wrong');
+    var cells = document.getElementsByClassName('click wrong');
     if (cells.length !== 0) {
         removeWrongClass(cells);
     }
@@ -200,22 +213,6 @@ function renderGrid(data) {
  */
 function clearGrid() {
     document.getElementById('table').innerHTML = '';
-}
-
-/*
- * Gathers inputs from grid < td > tags
- * @returns {FormData|gatherGridInputData.grid}
- */
-function gatherGridInputs() {
-    var cells = document.getElementsByClassName('inputs');
-    if (cells.length !== 0) {
-        var grid = new Array();
-        for (var i = 0; i < cells.length; i++) {
-            grid.push((parseInt(cells[i].value)) ? parseInt(cells[i].value) : '0');
-        }
-        return grid;
-    }
-    return false;
 }
 
 // TODO: make a single function for switching between grid, pdf-config and 

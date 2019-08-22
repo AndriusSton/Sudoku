@@ -205,13 +205,8 @@ h3 {
     color: #101E24;
 }
 
-.wrong {
-    border: solid red medium;
-}
 /* ----- Grid Styling End -----  */
 
-
-/* ----- Input Styling End ----- */
 
 /* ---- Borders ---- */
 .border-left {
@@ -232,6 +227,7 @@ h3 {
 
 /* ----- Borders End ----- */
 
+/* ----- Cell Button Styling ----- */
 .click {
     padding: 0;
     margin: 0;
@@ -243,6 +239,13 @@ h3 {
     width: 99%;
     background-color: #f2f3f4;
 }
+
+.wrong {
+    color: red;
+    border: solid red thin;
+}
+
+/* ----- Cell Button Styling End ----- */
 
 /* ----- MEDIAQUERIES -----*/
 /* start of desktop styles */
