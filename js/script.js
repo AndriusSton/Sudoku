@@ -15,6 +15,7 @@ window.addEventListener('load', fetchGrid('medium'), false);
  */
 document.getElementById('reset-btn').addEventListener('click', function () {
     clearGrid();
+    AppGlobals.solution = '';
     renderGrid(JSON.parse(sessionStorage.getItem('initial')));
 });
 
@@ -53,7 +54,7 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = AppGlobals.hostname + "/services/check.php";
     var initial = JSON.parse(sessionStorage.getItem('initial'));
-    var player_inputs = fetchInputs(initial, AppGlobals.grid);
+    var player_inputs = AppGlobals.solution ? false : fetchInputs(initial, AppGlobals.grid);
 
     if (player_inputs) {
         var gridToSend = new FormData();
