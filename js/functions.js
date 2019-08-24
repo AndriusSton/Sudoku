@@ -1,13 +1,13 @@
 // ------- FUNCTIONS -------
 
-function fetchInputs(initial, solved){
+function getPlayerInputs(initial, solved) {
     var result = solved.map((item, index) => {
-        if(item === 0){
+        if (item === 0) {
             return item;
         } else {
-            return ((item - initial[index])=== 0) ? false : item - initial[index];
+            return ((item - initial[index]) === 0) ? false : item - initial[index];
         }
-    }).filter( (val) =>{
+    }).filter((val) => {
         return val !== false;
     });
     return result;
@@ -22,9 +22,10 @@ function increment(id) {
 
 function fetchGrid(level) {
     sessionStorage.clear();
-    fetch(AppGlobals.hostname + '/services/get_puzzle/' + level).then((response) => {
-        return response.json();
-    }).then((result) => {
+    fetch(AppGlobals.hostname + '/services/get_puzzle/' + level)
+            .then((response) => {
+                return response.json();
+            }).then((result) => {
         AppGlobals.grid = result.grid;
         // sessionStorage must be cleared on new grid request
         if (!sessionStorage.getItem('initial')) {
@@ -141,6 +142,7 @@ function handleResponse() {
  * @returns {undefined}
  */
 function displayAlert(type, msg) {
+      
     var alertElement = document.getElementById('alert');
     var msgDisplayClass = '';
     switch (type) {

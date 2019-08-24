@@ -45,8 +45,6 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 }
 );
 
-
-
 /*
  * CHECK BUTTON LISTENER
  * @returns {undefined}
@@ -54,17 +52,24 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = AppGlobals.hostname + "/services/check.php";
     var initial = JSON.parse(sessionStorage.getItem('initial'));
-    var player_inputs = AppGlobals.solution ? false : fetchInputs(initial, AppGlobals.grid);
+    var player_inputs = AppGlobals.solution ? false : getPlayerInputs(initial, AppGlobals.grid);
 
     if (player_inputs) {
         var gridToSend = new FormData();
         gridToSend.append('initial', JSON.stringify(initial));
         gridToSend.append('solution', JSON.stringify(player_inputs));
-        process(url, 'POST', gridToSend, 'Grid');
+
+        fetch(url, {
+            method: 'POST',
+            body: gridToSend,
+        }).then(res => res.json())
+                .then(result => {
+                    displayWrongCells(result.wrong_cells);
+                })
+                .catch(error => console.error('Error:', error));
     } else {
         displayAlert('error', 'Nothing to solve.');
     }
-
 });
 
 /*
@@ -72,12 +77,28 @@ document.getElementById('check-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('get-pdf-btn').addEventListener('click', function () {
-    var formData = new FormData();
+    var pdf_config = new FormData();
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
     var numOfGrids = document.getElementById('num-of-grids').value;
     var url = AppGlobals.hostname + "/services/get_pdf.php";
-    formData.append('level', level);
-    formData.append('numOfGrids', numOfGrids);
-    process(url, 'POST', formData, 'PDF');
+    pdf_config.append('level', level);
+    pdf_config.append('numOfGrids', numOfGrids);
+
+
+// header: {content type : application/pdf} does not work, adobe cannot 
+// render the file
+    fetch(url, {
+        method: 'POST',
+        body: pdf_config
+    }).then(res => res.blob())
+            .then(blob => window.URL.createObjectURL(blob))
+            .then(url => {
+                var a = document.createElement('a');
+                a.download = 'sudoku.pdf';
+                a.href = url;
+                document.body.appendChild(a);
+                a.click();
+            })
+            .catch(error => console.error('Error:', error));
 });
