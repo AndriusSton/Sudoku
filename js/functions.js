@@ -1,5 +1,6 @@
 // ------- FUNCTIONS -------
 
+// TO DO: modify check on solved grid ('Nothing to solve case')
 function fetchInputs(initial, solved){
     var result = solved.map((item, index) => {
         if(item === 0){

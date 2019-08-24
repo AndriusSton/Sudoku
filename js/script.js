@@ -29,9 +29,22 @@ document.getElementById('solution-btn').addEventListener('click', function () {
     for (var i = 0; i < initial.length; i++) {
         gridToSend.append(i, initial[i]);
     }
-    process(url, 'POST', gridToSend, 'Grid');
+
+    fetch(url, {
+        method: 'POST',
+        body: gridToSend,
+    }).then(res => res.json())
+            .then(result => {
+                AppGlobals.solution = result.grid;
+                clearGrid();
+                renderGrid(AppGlobals.solution);
+                displayGrid();
+            })
+            .catch(error => console.error('Error:', error));
 }
 );
+
+
 
 /*
  * CHECK BUTTON LISTENER
@@ -40,12 +53,12 @@ document.getElementById('solution-btn').addEventListener('click', function () {
 document.getElementById('check-btn').addEventListener('click', function () {
     var url = AppGlobals.hostname + "/services/check.php";
     var initial = JSON.parse(sessionStorage.getItem('initial'));
-    var inputs = fetchInputs(initial, AppGlobals.grid);
+    var player_inputs = fetchInputs(initial, AppGlobals.grid);
 
-    if (inputs) {
+    if (player_inputs) {
         var gridToSend = new FormData();
         gridToSend.append('initial', JSON.stringify(initial));
-        gridToSend.append('solution', JSON.stringify(inputs));
+        gridToSend.append('solution', JSON.stringify(player_inputs));
         process(url, 'POST', gridToSend, 'Grid');
     } else {
         displayAlert('error', 'Nothing to solve.');

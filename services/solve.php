@@ -37,6 +37,7 @@ if (!isset($_POST)) {
 if (!is_array($_POST)) {
     http_response_code(400);
 }
+
 $grid = $_POST;
 
 $sudokuSolver = new Backtracking();

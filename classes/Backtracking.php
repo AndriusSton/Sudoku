@@ -39,7 +39,7 @@ class Backtracking implements Algorithm {
      */
 
     public function solve($puzzle) {
-
+        
         if (sizeof($puzzle) != 81) {
             throw new Exception('Solver: 9x9 sudoku is expected');
         }
