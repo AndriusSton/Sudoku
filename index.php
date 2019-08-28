@@ -12,9 +12,9 @@
             <div id="level-menu">
                 <h1>Choose Your level and PLAY!</h1>             
                 <ul id="level-list">
-                    <li><button type="button" class="level-btn" id="easy" onclick="fetchGrid('easy');">Easy</button></li>
-                    <li><button type="button" class="level-btn" id="medium" onclick="fetchGrid('medium');">Medium</button></li>
-                    <li><button type="button" class="level-btn" id="hard" onclick="fetchGrid('hard');">Hard</button></li>
+                    <li><button type="button" class="level-btn" id="easy" onclick="getNewGrid('easy');">Easy</button></li>
+                    <li><button type="button" class="level-btn" id="medium" onclick="getNewGrid('medium');">Medium</button></li>
+                    <li><button type="button" class="level-btn" id="hard" onclick="getNewGrid('hard');">Hard</button></li>
                 </ul>
             </div>
             <!-- NAVIGATION END -->
@@ -57,7 +57,6 @@
             <!-- MAIN CONTENT END -->
 
         </div>
-        <script src="js/functions.js"></script>
         <script src="js/script.js"></script>
     </body>
 </html>

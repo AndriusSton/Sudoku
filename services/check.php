@@ -38,12 +38,12 @@ if (!is_array($_POST)) {
     http_response_code(400);
 }
 $initial = array_map('intval', json_decode($_POST['initial'], true));
-$userSolution = array_map('intval', json_decode($_POST['solution'], true));
+$player_inputs = array_map('intval', json_decode($_POST['player_inputs'], true));
 
 $checker = new Puzzle(new Backtracking());
 try {
-    $solved = $checker->check($initial, $userSolution);
-
+    $solved = $checker->check($initial, $player_inputs);
+    
     if (!empty($solved)) {
         echo json_encode(array('wrong_cells' => $solved));
     } else {

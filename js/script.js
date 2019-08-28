@@ -1,22 +1,85 @@
 // Global variables
 var AppGlobals = {
-    grid: '',
-    solution: '',
     hostname: location.protocol + "//" + location.hostname + ((location.port) ? ":" + location.port : ""),
-    request: createXMLHttpRequestObject()
 };
 
+const Puzzle = {
+    current: Array(),
+    solution: false,
+    increment_value: function (id) {
+        this.current[id] = (this.current[id] === 9) ? 1 : ++this.current[id];
+        document.getElementById(id).innerHTML = this.current[id];
+        event.preventDefault();
+    },
+    render: function () {
+        var HTMLtable = '<table>';
+        for (var i = 0; i < 9; i++) {
+            HTMLtable += '<tr>';
+            for (var j = 0; j < 9; j++) {
+                var id = (i * 9 + j);
+                var borderClass = 'cell';
+
+                // add thicker vertical lines
+                borderClass += (id % 3 === 0) ? ' border-left' : '';
+                borderClass += (id % 9 === 8) ? ' border-right' : '';
+
+                //add thicker horizontal lines
+                borderClass += (id < 9) ? ' border-top' : '';
+                borderClass += (id % 27 >= 18) ? ' border-bottom' : '';
+                HTMLtable += '<td class="' + borderClass + '">' +
+                        ((this.current[id] !== 0) ? this.current[id] :
+                                '<button class="click" id="' + id + '" onclick="incrementValue(this.id)">') +
+                        '&nbsp;</button></td>';
+            }
+            HTMLtable += '</tr>';
+        }
+        HTMLtable += '</table>';
+        document.getElementById('table').insertAdjacentHTML('beforeend', HTMLtable);
+    }
+};
+
+const fetcher = {
+    get: function (url = '') {
+        return fetch(url)
+                .then(res => {
+                    return res.json();
+                });
+    },
+    post: function (url = '', data = '') {
+        return fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => {
+            return res.json();
+        });
+    }
+}
+
 // Get and display new grid when the page is loaded
-window.addEventListener('load', fetchGrid('medium'), false);
+window.addEventListener('load', () => {
+    fetcher.get(AppGlobals.hostname + '/services/get_puzzle/medium').then(result => {
+        Puzzle.current = result.grid;
+        sessionStorage.clear();
+        // sessionStorage must be cleared on new grid request
+        if (!sessionStorage.getItem('initial')) {
+            // save the new grid to sessionStorage
+            sessionStorage.setItem('initial', JSON.stringify(Puzzle.current));
+        }
+        clearTable();
+        Puzzle.render();
+        displayGrid();
+    });
+}, false);
 
 /*
  * RESET BUTTON LISTENER
  * @returns {undefined}
  */
 document.getElementById('reset-btn').addEventListener('click', function () {
-    clearGrid();
-    AppGlobals.solution = '';
-    renderGrid(JSON.parse(sessionStorage.getItem('initial')));
+    Puzzle.solution = false;
+    Puzzle.current = JSON.parse(sessionStorage.getItem('initial'));
+    clearTable();
+    Puzzle.render();
 });
 
 /*
@@ -24,54 +87,43 @@ document.getElementById('reset-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('solution-btn').addEventListener('click', function () {
-    var url = AppGlobals.hostname + "/services/solve.php";
+    var url = AppGlobals.hostname + '/services/solve.php';
     var initial = JSON.parse(sessionStorage.getItem('initial'));
     var gridToSend = new FormData();
     for (var i = 0; i < initial.length; i++) {
         gridToSend.append(i, initial[i]);
     }
 
-    fetch(url, {
-        method: 'POST',
-        body: gridToSend,
-    }).then(res => res.json())
-            .then(result => {
-                AppGlobals.solution = result.grid;
-                clearGrid();
-                renderGrid(AppGlobals.solution);
-                displayGrid();
-            })
-            .catch(error => console.error('Error:', error));
-}
-);
+    fetcher.post(url, gridToSend).then(
+            result => {
+                Puzzle.solution = true;
+                Puzzle.current = result.grid;
+                clearTable();
+                Puzzle.render();
+                //displayGrid();
+            }
+    );
+});
 
 /*
  * CHECK BUTTON LISTENER
  * @returns {undefined}
  */
 document.getElementById('check-btn').addEventListener('click', function () {
-    var url = AppGlobals.hostname + "/services/check.php";
+    var url = AppGlobals.hostname + '/services/check.php';
     var initial = JSON.parse(sessionStorage.getItem('initial'));
-    var player_inputs = AppGlobals.solution ? false : getPlayerInputs(initial, AppGlobals.grid);
-
-    if (player_inputs) {
+    if (!Puzzle.solution) {
         var gridToSend = new FormData();
         gridToSend.append('initial', JSON.stringify(initial));
-        gridToSend.append('solution', JSON.stringify(player_inputs));
-
-        fetch(url, {
-            method: 'POST',
-            body: gridToSend,
-        }).then(res => res.json())
+        gridToSend.append('player_inputs', JSON.stringify(getPlayerInputs(initial, Puzzle.current)));
+        fetcher.post(url, gridToSend)
                 .then(result => {
                     displayWrongCells(result.wrong_cells);
-                })
-                .catch(error => console.error('Error:', error));
+                });
     } else {
         displayAlert('error', 'Nothing to solve.');
     }
 });
-
 /*
  * GET PDF BUTTON LISTENER
  * @returns {undefined}
@@ -81,11 +133,9 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
     var numOfGrids = document.getElementById('num-of-grids').value;
-    var url = AppGlobals.hostname + "/services/get_pdf.php";
+    var url = AppGlobals.hostname + '/services/get_pdf.php';
     pdf_config.append('level', level);
     pdf_config.append('numOfGrids', numOfGrids);
-
-
 // header: {content type : application/pdf} does not work, adobe cannot 
 // render the file
     fetch(url, {
@@ -102,3 +152,120 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
             })
             .catch(error => console.error('Error:', error));
 });
+
+
+// ------- FUNCTIONS -------
+
+function getPlayerInputs(initial, solved) {
+    var result = solved.map((item, index) => {
+        if (item === 0) {
+            return item;
+        } else {
+            return ((item - initial[index]) === 0) ? false : item - initial[index];
+        }
+    }).filter((val) => {
+        return val !== false;
+    });
+    return result;
+}
+
+function requestNewGrid(level) {
+    sessionStorage.clear();
+    return fetch(AppGlobals.hostname + '/services/get_puzzle/' + level)
+            .then(res => {
+                return res.json();
+            });
+}
+
+function getNewGrid(level) {
+    requestNewGrid(level).then((result) => {
+        Puzzle.current = result.grid;
+        // sessionStorage must be cleared on new grid request
+        if (!sessionStorage.getItem('initial')) {
+            // save the new grid to sessionStorage
+            sessionStorage.setItem('initial', JSON.stringify(Puzzle.current));
+        }
+        clearTable();
+        Puzzle.render();
+        displayGrid();
+    });
+}
+
+/*
+ * Prints error mesages
+ * @param {string} message
+ * @returns {undefined}
+ */
+function displayAlert(type, msg) {
+
+    var alertElement = document.getElementById('alert');
+    var msgDisplayClass = '';
+    switch (type) {
+        case 'error':
+            msgDisplayClass = 'error-msg';
+            break;
+        case 'congrats':
+            msgDisplayClass = 'congrats-msg';
+            break;
+        default:
+            msgDisplayClass = 'default-msg';
+    }
+    alertElement.classList.add(msgDisplayClass);
+    document.getElementById('message').innerHTML = msg;
+    alertElement.style.display = 'block';
+}
+
+function displayWrongCells(wrongCells) {
+    var cells = document.getElementsByClassName('click wrong');
+    if (cells.length !== 0) {
+        removeWrongClass(cells);
+    }
+    for (var i = 0; i < wrongCells.length; i++) {
+        var cell = document.getElementById(wrongCells[i]);
+        cell.classList.add('wrong');
+    }
+}
+
+function removeWrongClass(cells) {
+    cells[0].classList.remove('wrong');
+    if (cells[0]) {
+        removeWrongClass(cells);
+    }
+}
+
+
+/*
+ * Clears HTML table
+ * @returns {undefined}
+ */
+function clearTable() {
+    document.getElementById('table').innerHTML = '';
+}
+
+// TODO: make a single function for switching between grid, pdf-config and 
+// initial windows
+
+/*
+ * Switches classes for grid view
+ * @returns {undefined}
+ */
+function displayGrid() {
+    document.getElementById('pdf-config').classList.add('hidden');
+    document.getElementById('main-container').classList.remove('hidden');
+    document.getElementById('grid').classList.remove('hidden');
+    document.getElementById('main-container').classList.add('basicTransition');
+    document.getElementById('controls').classList.add('controlsTransition');
+}
+
+/*
+ * Switches classes for PDF download configuration view
+ * @returns {undefined}
+ */
+function displayPDFConfig() {
+    document.getElementById('pdf-config').classList.remove('hidden');
+    document.getElementById('grid').classList.add('hidden');
+    clearGrid();
+    document.getElementById('main-container').classList.remove('hidden');
+
+
+}
