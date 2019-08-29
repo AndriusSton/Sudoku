@@ -1,4 +1,3 @@
-// Global variables
 var AppGlobals = {
     hostname: location.protocol + "//" + location.hostname + ((location.port) ? ":" + location.port : ""),
 };
