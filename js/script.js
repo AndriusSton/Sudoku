@@ -27,7 +27,7 @@ const Puzzle = {
                 borderClass += (id % 27 >= 18) ? ' border-bottom' : '';
                 HTMLtable += '<td class="' + borderClass + '">' +
                         ((this.current[id] !== 0) ? this.current[id] :
-                                '<button class="click" id="' + id + '" onclick="incrementValue(this.id)">') +
+                                '<button class="click" id="' + id + '" onclick="Puzzle.increment_value(this.id)">') +
                         '&nbsp;</button></td>';
             }
             HTMLtable += '</tr>';
@@ -150,6 +150,26 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
                 a.click();
             })
             .catch(error => console.error('Error:', error));
+});
+
+/*
+ * SAVE BUTTON LISTENER
+ * @returns {undefined}
+ */
+document.getElementById('save-btn').addEventListener('click', function () {
+    var url = AppGlobals.hostname + '/services/save.php';
+    var initial = JSON.parse(sessionStorage.getItem('initial'));
+    if (!Puzzle.solution) {
+        var gridToSend = new FormData();
+        gridToSend.append('initial', JSON.stringify(initial));
+        gridToSend.append('player_inputs', JSON.stringify(getPlayerInputs(initial, Puzzle.current)));
+        fetcher.post(url, gridToSend)
+                .then(result => {
+                    displayAlert('', result['message']);
+                });
+    } else {
+        displayAlert('error', 'Nothing to solve.');
+    }
 });
 
 
