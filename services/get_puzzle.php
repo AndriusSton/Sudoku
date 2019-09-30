@@ -4,8 +4,6 @@
  * Service for getting a SUDOKU puzzle. A JSON object is sent back.
  * 
  */
-
-
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
     // you want to allow, and if so:
@@ -25,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
     }
 }
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 

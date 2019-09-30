@@ -41,15 +41,20 @@ $initial = array_map('intval', json_decode($_POST['initial'], true));
 $player_inputs = array_map('intval', json_decode($_POST['player_inputs'], true));
 $cookie_name = 'com_game_sudoku';
 
-// Generate play_id/$key and save to a cookie
-// Save both palyer_inputs and initial grid under one play_id/key
-// As player can play multiple puzzles
 // Restrict available amount of saves, for example no more than 5 saves
 // Let user to choose, which play_id to fetch from cookie
-// Do not use serialize/unserialize (https://stackoverflow.com/questions/9032007/arrays-in-cookies-php)
+// Check if cookie is already set
 if (isset($_COOKIE[$cookie_name])) {
+    // Do not use serialize/unserialize (https://stackoverflow.com/questions/9032007/arrays-in-cookies-php)
     $cookie_value = json_decode($_COOKIE[$cookie_name], true);
+
+    // each game is saved as a key-value pair where key is uniq id/key and value
+    // is an array of 'initial' grid and 'player_inputs'
     $keys = array_keys($cookie_value);
+
+    // iterate through all ids and check if requested save is performed on an
+    // 'initial' grid that is already saved
+    // if so, then update 'player_inputs'
     foreach ($keys as $key) {
         if ($cookie_value[$key]['initial'] === $initial) {
             $cookie_value = array(
@@ -62,6 +67,8 @@ if (isset($_COOKIE[$cookie_name])) {
         }
     }
 
+    // if its a new game save, then generate a new id and save the data as new 
+    // key-value pair to cookie_value array
     $new_key = time() . rand(1, 9);
     $cookie_value[$new_key] = array(
         'initial' => $initial,
@@ -69,25 +76,15 @@ if (isset($_COOKIE[$cookie_name])) {
     );
     setcookie($cookie_name, json_encode($cookie_value), time() + 180, "/"); // 3min
 } else {
+    // if there's no cookie with a cookie_name, save a new cookie
     $cookie_value = array(
         time() . rand(1, 9) => array('initial' => $initial,
             'player_inputs' => $player_inputs)
     );
     setcookie($cookie_name, json_encode($cookie_value), time() + 180, "/"); // 3min
 }
+
+// send a message of a succesfull save
 echo json_encode(array(
-    'message' => 'Saved'
+    'message' => 'Saved',
 ));
-
-
-//try {
-//    $solved = $checker->check($initial, $player_inputs);
-//    
-//    if (!empty($solved)) {
-//        echo json_encode(array('wrong_cells' => $solved));
-//    } else {
-//        echo json_encode(array('message' => 'Congratulations! :)'));
-//    }
-//} catch (Exception $ex) {
-//    echo json_encode(array('error' => $ex->getMessage()));
-//}

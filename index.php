@@ -58,6 +58,13 @@
             <!-- MAIN CONTENT END -->
 
         </div>
+        <div id="gameSave" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content" id="saveGameMsg">
+                <span class="close">&times;</span>
+            </div>
+
+        </div>
         <script src="js/script.js"></script>
     </body>
 </html>
