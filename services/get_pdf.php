@@ -17,9 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-include_once '../classes/Puzzle.php';
-include_once '../classes/Backtracking.php';
-include_once '../classes/PDFGenerator.php';
+require('../vendor/autoload.php');
+
+use App\Classes\Backtracking;
+use App\Classes\PDFGenerator;
+use App\Classes\Puzzle;
 
 // validate $_POST
 if (!isset($_POST['level']) && !isset($_POST['numOfGrids'])) {

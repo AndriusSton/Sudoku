@@ -4,6 +4,7 @@
  * Service for getting a SUDOKU puzzle. A JSON object is sent back.
  * 
  */
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
     // you want to allow, and if so:
@@ -27,14 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
+require('../vendor/autoload.php');
 
-include_once '../classes/Puzzle.php';
-include_once '../classes/Backtracking.php';
-include_once '../config/sudoku_defines.php';
-
+use App\Classes\Backtracking;
+use App\Classes\Puzzle;
 
 // split the request url 
 $request = explode('/', rtrim((isset($_REQUEST['uri']) ? '/' . $_REQUEST['uri'] : '/'), '/'));
+
+
 
 // check if all parameters are in the url
 if (sizeof($request) === 4) {

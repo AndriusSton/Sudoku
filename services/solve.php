@@ -29,7 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-include_once '../classes/Backtracking.php';
+require('../vendor/autoload.php');
+
+use App\Classes\Backtracking;
 
 if (!isset($_POST)) {
     http_response_code(400);
