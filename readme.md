@@ -1,12 +1,13 @@
 # The Sudoku game project
 
 ## Grid generation
-App generates 9x9 sudoku grid with a selected difficulty level. The levels are hardcoded:
+App generates 9x9 sudoku grid with a selected difficulty level. 
+Grid generation is based on backtracking-like algorithm.
+The grid generated is just an 81 size array of numbers 0-9.
+The levels are hardcoded:
  * EASY (20 empty cells);
  * MEDIUM (40 empty cells);
  * HARD (50 empty cells).
-The generation is based on backtracking-like algorithm.
-The grid generated is just an 81 size array of numbers 0-9.
 
  ## Endpoints
 There are five endpoints/services. In depth docs of endpoints TBD.
