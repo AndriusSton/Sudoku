@@ -4,4 +4,3 @@ RewriteBase /services/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ get_puzzle.php?uri=$1 [QSA=L]
-
