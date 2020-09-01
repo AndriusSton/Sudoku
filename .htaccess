@@ -1,6 +1,9 @@
 RewriteEngine On
-RewriteBase /services/
+RewriteBase /
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ get_puzzle.php?uri=$1 [QSA=L]
+RewriteRule ^(.+)$ main.php?$1 [L,QSA]
+# [QSA] - query string append
+#RewriteRule ^(.+)$ get_puzzle.php?uri=$1 [QSA=L]
+#RewriteRule ^(.+)$ getJson.php?uri=$1 [QSA=L]
