@@ -7,7 +7,7 @@
  * @author Andrius Stonys
  */
 
-namespace App\Interfaces;
+namespace App\Service;
 
 interface Algorithm {
     /*

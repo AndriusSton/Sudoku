@@ -56,7 +56,7 @@ const fetcher = {
 
 // Get and display new grid when the page is loaded
 window.addEventListener('load', () => {
-    fetcher.get(AppGlobals.hostname + '/services/get_puzzle/medium').then(result => {
+    fetcher.get(AppGlobals.hostname + '/get/array/medium').then(result => {
         Puzzle.current = result.grid;
         sessionStorage.clear();
         // sessionStorage must be cleared on new grid request
@@ -86,7 +86,7 @@ document.getElementById('reset-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('solution-btn').addEventListener('click', function () {
-    var url = AppGlobals.hostname + '/services/solve.php';
+    var url = AppGlobals.hostname + '/post/solve';
     var initial = JSON.parse(sessionStorage.getItem('initial'));
     var gridToSend = new FormData();
     for (var i = 0; i < initial.length; i++) {
@@ -99,7 +99,6 @@ document.getElementById('solution-btn').addEventListener('click', function () {
                 Puzzle.current = result.grid;
                 clearTable();
                 Puzzle.render();
-                //displayGrid();
             }
     );
 });
@@ -109,7 +108,7 @@ document.getElementById('solution-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('check-btn').addEventListener('click', function () {
-    var url = AppGlobals.hostname + '/services/check.php';
+    var url = AppGlobals.hostname + '/post/check';
     var initial = JSON.parse(sessionStorage.getItem('initial'));
     if (!Puzzle.solution) {
         var gridToSend = new FormData();
@@ -132,7 +131,7 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
     var selector = document.getElementById('level');
     var level = selector[selector.selectedIndex].value;
     var numOfGrids = document.getElementById('num-of-grids').value;
-    var url = AppGlobals.hostname + '/services/get_pdf.php';
+    var url = AppGlobals.hostname + '/post/pdf';
     pdf_config.append('level', level);
     pdf_config.append('numOfGrids', numOfGrids);
 // header: {content type : application/pdf} does not work, adobe cannot 
@@ -157,7 +156,7 @@ document.getElementById('get-pdf-btn').addEventListener('click', function () {
  * @returns {undefined}
  */
 document.getElementById('save-btn').addEventListener('click', function () {
-    var url = AppGlobals.hostname + '/services/save.php';
+    var url = AppGlobals.hostname + '/post/save';
     var initial = JSON.parse(sessionStorage.getItem('initial'));
     if (!Puzzle.solution) {
         var gridToSend = new FormData();
@@ -221,7 +220,7 @@ function getPlayerInputs(initial, solved) {
 
 function requestNewGrid(level) {
     sessionStorage.clear();
-    return fetch(AppGlobals.hostname + '/services/get_puzzle/' + level)
+    return fetch(AppGlobals.hostname + '/get/array/' + level)
             .then(res => {
                 return res.json();
             });

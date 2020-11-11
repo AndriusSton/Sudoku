@@ -3,17 +3,19 @@
 /**
  * Algorithm class provides SUDOKU grid generation method using backtracking
  * algorithm. Each number is selected out of number of available choices at
- * particular cell location. If there is nothing to choose from, cell counter 
+ * particular cell location. If there is nothing to choose from, cell counter
  * gets back to a previous cell which had more than one choice to select from.
  *
  * @author Andrius Stonys
  */
-namespace App\Classes;
 
-use App\Interfaces\Algorithm;
+namespace App\Service;
+
+use App\Service\Algorithm;
 
 
-class Backtracking implements Algorithm {
+class Backtracking implements Algorithm
+{
     /*
      * Initial sudoku grid[]. Empty cell is represented by value zero.
      */
@@ -40,10 +42,10 @@ class Backtracking implements Algorithm {
      * @param Array $puzzle with a size of 81 elements
      * @return array $solution
      */
+    public function solve($puzzle)
+    {
 
-    public function solve($puzzle) {
-        
-        if (sizeof($puzzle) != 81) {
+        if (count($puzzle) !== 81) {
             throw new Exception('Solver: 9x9 sudoku is expected');
         }
         $solution = $puzzle;
@@ -53,10 +55,10 @@ class Backtracking implements Algorithm {
 
         // Iterate through empty cells and randomly select the number
         // from possible cell value array
-        for ($j = 0; $j < sizeof($emptyCells); $j++) {
+        for ($j = 0; $j < count($emptyCells); $j++) {
 
             // Get possible values for the $j cell in a grid
-            $possibleCellValues = self::getPossibleValues($emptyCells[$j], $solution);
+            $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
 
             // IF there is nothing to choose, iterate the following steps until
             // the possible cell value array has at least 2 values to select
@@ -69,7 +71,7 @@ class Backtracking implements Algorithm {
                     $j--;
 
                     // get the previous cell values for that index
-                    $possibleCellValues = self::getPossibleValues($emptyCells[$j], $solution);
+                    $possibleCellValues = $this->getPossibleValues($emptyCells[$j], $solution);
 
                     // form an array of wrong choices at the cell
                     if (array_key_exists($emptyCells[$j], $wrongChoices)) {
@@ -100,7 +102,7 @@ class Backtracking implements Algorithm {
                     sort($possibleCellValues);
 
                     // Do the steps while there is nothing to choose from
-                } while (sizeof($possibleCellValues) < 1);
+                } while (count($possibleCellValues) < 1);
             }
 
             // Randomly select and asign a number from possible cell value
@@ -115,9 +117,9 @@ class Backtracking implements Algorithm {
      * empty grid (INITIAL_TABLE).
      * @return array $solution
      */
-
-    public function generate() {
-        return self::solve(self::INITIAL_TABLE);
+    public function generate()
+    {
+        return $this->solve(self::INITIAL_TABLE);
     }
 
     /*
@@ -126,10 +128,14 @@ class Backtracking implements Algorithm {
      * @param array $table
      * @return array $possible values
      */
-
-    private function getPossibleValues($cell, $table) {
+    private function getPossibleValues($cell, $table)
+    {
         $possibleValues = array_diff(
-                self::INITIAL_POSSIBLE_VALUES, self::getRowArray($cell, $table), self::getColArray($cell, $table), self::getBlockArray($cell, $table));
+            self::INITIAL_POSSIBLE_VALUES,
+            $this->getRowArray($cell, $table),
+            $this->getColArray($cell, $table),
+            $this->getBlockArray($cell, $table)
+        );
         sort($possibleValues);
         return $possibleValues;
     }
@@ -139,9 +145,9 @@ class Backtracking implements Algorithm {
      * @param int $cell
      * @return int
      */
-
-    private function row($cell) {
-        return (int) floor($cell / 9);
+    private function row($cell)
+    {
+        return (int)floor($cell / 9);
     }
 
     /*
@@ -149,9 +155,9 @@ class Backtracking implements Algorithm {
      * @param int $cell
      * @return int
      */
-
-    private function col($cell) {
-        return (int) floor($cell % 9);
+    private function col($cell)
+    {
+        return (int)floor($cell % 9);
     }
 
     /*
@@ -159,9 +165,9 @@ class Backtracking implements Algorithm {
      * @param int $cell
      * @return int
      */
-
-    private function block($cell) {
-        return floor(self::row($cell) / 3) * 3 + floor(self::col($cell) / 3);
+    private function block($cell)
+    {
+        return floor($this->row($cell) / 3) * 3 + floor($this->col($cell) / 3);
     }
 
     /*
@@ -171,11 +177,11 @@ class Backtracking implements Algorithm {
      * @param array $table
      * @return array $cells
      */
-
-    public function getRowArray($cell, $table) {
+    public function getRowArray($cell, $table)
+    {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $index = $i * 9 + self::col($cell);
+            $index = $i * 9 + $this->col($cell);
             $cells[$index] = $table[$index];
         }
         return $cells;
@@ -188,11 +194,11 @@ class Backtracking implements Algorithm {
      * @param array $table
      * @return array $cells
      */
-
-    public function getColArray($cell, $table) {
+    public function getColArray($cell, $table)
+    {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $index = self::row($cell) * 9 + $i;
+            $index = $this->row($cell) * 9 + $i;
             $cells[$index] = $table[$index];
         }
         return $cells;
@@ -205,14 +211,13 @@ class Backtracking implements Algorithm {
      * @param array $table
      * @return array $cells
      */
-
-    public function getBlockArray($cell, $table) {
+    public function getBlockArray($cell, $table)
+    {
         $cells = array();
         for ($i = 0; $i < 9; $i++) {
-            $index = floor(self::block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * (self::block($cell) % 3);
+            $index = floor($this->block($cell) / 3) * 27 + $i % 3 + 9 * floor($i / 3) + 3 * ($this->block($cell) % 3);
             $cells[$index] = $table[$index];
         }
         return $cells;
-    }    
-    
+    }
 }

@@ -1,21 +1,27 @@
 {
-    "name": "andrius/sudoku",
-    "description": "Sudoku grid generator/solver",
-    "type": "project",
-    "authors": [
-        {
-            "name": "Andrius Stonys",
-            "email": "29209107+AndriusSton@users.noreply.github.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "App\\Classes\\": "src/classes",
-            "App\\Interfaces\\": "src/interfaces"
-        },
-        "files" : ["config/sudoku_defines.php"]
-    },
-    "require": {
-        "tecnickcom/tcpdf": "^6.3"
+  "name": "andrius/sudoku",
+  "description": "Sudoku grid generator/solver",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Andrius Stonys",
+      "email": "29209107+AndriusSton@users.noreply.github.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\Api\\": "src/App/Api",
+      "App\\Service\\": "src/App/Service",
+      "App\\Controller\\": "src/App/Controller",
+      "Core\\": "src/Core"
+    },
+    "files": [
+      "src/Core/sudoku_defines.php"
+    ]
+  },
+  "require": {
+    "tecnickcom/tcpdf": "^6.3",
+    "symfony/http-foundation": "^4.4",
+    "ext-json": "*"
+  }
 }
