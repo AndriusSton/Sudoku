@@ -20,3 +20,10 @@ There are five endpoints/services. In depth docs of endpoints TBD.
 ## PDF doc generator
 PDF document generation is based on **tecnickcom/tcpdf**
 
+## Live project
+https://game-sudoku.herokuapp.com
+
+You can get grid via urls:
+- get grid as array of 81 numbers: https://game-sudoku.herokuapp.com/get/array/<level>
+- get grid as json of 9 arrays of 9 numbers which represent 9 rows: https://game-sudoku.herokuapp.com/get/json/<level>
+"0" represents empty cell
